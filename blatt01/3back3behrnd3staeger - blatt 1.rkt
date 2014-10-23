@@ -1,7 +1,7 @@
 #lang racket
 
 ; Aufgabe 1.1
-; -----------
+; ------------------------------------------------------------------------------
 
 ; Berechnte den Radiant aus den Grand
 ; Beispielaufruf:
@@ -31,7 +31,7 @@
 
 
 ; Aufgabe 1.2
-; -----------
+; ------------------------------------------------------------------------------
 
 ; Berechnet den acos von einem cos-Wert
 ;   - aus dem Cosinus wird der Sinus berechnet
@@ -66,7 +66,7 @@
 
 
 ; Aufgabe 1.3
-; -----------
+; ------------------------------------------------------------------------------
 
 ; Rechnet Seemeilen in Kilometer um
 ;   - 1 nm = 1.852 km
@@ -81,7 +81,7 @@
 
 
 ; Aufgabe 2.1
-; -----------
+; ------------------------------------------------------------------------------
 
 ; Berechnet die Entfernung zweier Punkte auf der Erde in Kilometer
 ; Beispielaufruf:
@@ -95,36 +95,100 @@
     ( *
       ; Berechnung von d_g in Grad
       ( radians->degrees
-        ; Berechnung von d_g im Bogenmaß
-        ( acos
-          ; Berechnung von cos(d_g)
-          ( +
-            ( *
-              ( sin
-                ( degrees->radians breitengradA )
-              )
-              ( sin
-                ( degrees->radians breitengradB ) 
-              )
-            )
-            ( *
-              ( cos
-                ( degrees->radians breitengradA )
-              )
-              ( cos
-                ( degrees->radians breitengradB )
-              )
-              ( cos
-                ( degrees->radians
-                  ( - laengengradB laengengradA )
-                )
-              )
-            )
-          )
+        ; Berechnung von cos(d_g)
+        ( zentriWinkel
+          breitengradA
+          laengengradA
+          breitengradB
+          laengengradB
         )
       )
       60
     )
   )
+)
+; Berechnet den Zentriwinkel (d_g) anhand zweier Positionen in Rad
+(define (zentriWinkel breitengradA laengengradA breitengradB laengengradB)
+  ( my-acos
+    ( +
+      ( *
+        ( sin
+          ( degrees->radians breitengradA )
+        )
+        ( sin
+          ( degrees->radians breitengradB ) 
+        )
+      )
+      ( *
+        ( cos
+          ( degrees->radians breitengradA )
+        )
+        ( cos
+          ( degrees->radians breitengradB )
+        )
+        ( cos
+          ( degrees->radians
+            ( - laengengradB laengengradA )
+          )
+        )
+      )
+    )
+  )
+)
+
+
+; Aufgabe 2.2
+; ------------------------------------------------------------------------------
+
+; Berechnet die Richtung, in der ein Ziel B vom Punkt A aus liegt anhand der Funktion
+;   acos( ( sin(br B) - cos(zentriwinkel) * sin(br A) ) / ( cos(br A) * sin(zentriwinkel) ) )
+; Beispielaufruf:
+;   Oslo - Honkong     : (anfangskurs 59.93 10.75 22.2 114.1)
+(define (anfangskurs breitengradA laengengradA breitengradB laengengradB)
+  ( radians->degrees  
+    ( my-acos
+      ( /
+        ( -
+          ( sin 
+            ( degrees->radians breitengradB )
+          )
+          ( *
+            ( cos
+              ( zentriWinkel
+                breitengradA
+                laengengradA
+                breitengradB
+                laengengradB
+              )
+            )
+            ( sin
+              ( degrees->radians breitengradA )
+            )
+          )
+        )
+        ( *
+          ( cos
+            ( degrees->radians breitengradA )
+          )
+          ( sin
+            ( zentriWinkel
+              breitengradA
+              laengengradA
+              breitengradB
+              laengengradB
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+
+; Aufgabe 2.3
+; ------------------------------------------------------------------------------
+
+(define (grad->himmelsrichtung grad)
+  ( grad )
 )
 
