@@ -7,14 +7,26 @@
 ; Beispielaufruf:
 ;   (degrees->radians 360)
 (define (degrees->radians degrees)
-  ( * ( / degrees 180 ) pi )
+  ( *
+    ( /
+      degrees
+      180
+    )
+    pi
+  )
 )
 
 ; Berechnet die Grad aus dem Raidant
 ; Beispielaufruf:
 ;   (radians->degrees 3.1415926)
 (define (radians->degrees radians)
-  ( * ( / radians pi ) 180 )
+  ( *
+    ( /
+      radians
+      pi
+    )
+    180
+  )
 )
 
 
