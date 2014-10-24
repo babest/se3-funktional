@@ -8,11 +8,16 @@
     Timon Back (3back)
     Fabian Behrendt (3behrend)
     Nicolai Stäger (3staeger)
+
+  Beispielaufrufe befinden sich immer am Ende der Aufgabe
+  und können einfach auskommentiert werden.
 |#
 
 
-; Aufgabe 1.1
-; ------------------------------------------------------------------------------
+
+; ##############################################################################
+; ## Aufgabe 1.1 ###############################################################
+; ##############################################################################
 
 ;; Berechnte den Radiant aus den Grand
 (define (degrees->radians degrees)
@@ -24,9 +29,6 @@
     pi
   )
 )
-; Beispielaufruf:
-; ( degrees->radians 360 )
-
 
 ;; Berechnet die Grad aus dem Raidant
 (define (radians->degrees radians)
@@ -38,12 +40,17 @@
     180
   )
 )
+
 ; Beispielaufruf:
+; ( degrees->radians 360 )
 ; ( radians->degrees 3.1415926 )
 
 
-; Aufgabe 1.2
-; ------------------------------------------------------------------------------
+
+
+; ##############################################################################
+; ## Aufgabe 1.2 ###############################################################
+; ##############################################################################
 
 ;; Berechnet den acos von einem cos-Wert
 ;;   - aus dem Cosinus wird der Sinus berechnet
@@ -57,8 +64,6 @@
     )
   )
 )
-; Beispielaufruf:
-; ( my-acos 1 )
 
 ;; Hilfsmethode
 ;; Berechnet den sin-Wert aus einem cos-Wert
@@ -77,9 +82,15 @@
   )
 )
 
+; Beispielaufruf:
+; ( my-acos 1 )
 
-; Aufgabe 1.3
-; ------------------------------------------------------------------------------
+
+
+
+; ##############################################################################
+; ## Aufgabe 1.3 ###############################################################
+; ##############################################################################
 
 ;; Rechnet Seemeilen in Kilometer um
 ;;   - 1 nm = 1.852 km
@@ -89,12 +100,16 @@
     1.852
   )
 )
+
 ; Beispielaufruf:
 ; (nm->km 10)
 
 
-; Aufgabe 2.1
-; ------------------------------------------------------------------------------
+
+
+; ##############################################################################
+; ## Aufgabe 2.1 ###############################################################
+; ##############################################################################
 
 ;; Berechnet die Entfernung zweier Punkte auf der Erde in Kilometer
 (define (distanzAB breitengradA laengengradA breitengradB laengengradB)
@@ -152,8 +167,11 @@
 ; ( distanzAB -27.10 -109.40 -12.10  -77.05 )  ; Osterinseln - Lima
 
 
-; Aufgabe 2.2
-; ------------------------------------------------------------------------------
+
+
+; ##############################################################################
+; ## Aufgabe 2.2 ###############################################################
+; ##############################################################################
 
 ;; Berechnet die Richtung, in der ein Ziel B vom Punkt A aus liegt
 ;; anhand der Funktion:
@@ -164,9 +182,6 @@
     (+)
   )
 )
-; Beispielaufruf:
-; ( anfangskurs 59.93 10.75 22.2 114.1 )  ; Oslo - Honkong
-
 
 ;; Hilfsmethode
 ;; Berechnet den Richtungswinkel von Punkt A Richtung Punkt B
@@ -209,14 +224,18 @@
     )
   )
 )
+
 ; Beispielaufruf:
 ; ( richtungswinkel  59.93   10.75  22.20  114.10 )  ; Oslo - Honkong
 ; ( richtungswinkel  37.75 -122.45  21.32 -157.83 )  ; San Francisco - Honolulu
 ; ( richtungswinkel -27.10 -109.40 -12.10  -77.05 )  ; Osterinseln - Lima
 
 
-; Aufgabe 2.3
-; ------------------------------------------------------------------------------
+
+
+; ##############################################################################
+; ## Aufgabe 2.3 ###############################################################
+; ##############################################################################
 
 (define (grad->himmelsrichtung grad)
   ( grad )
