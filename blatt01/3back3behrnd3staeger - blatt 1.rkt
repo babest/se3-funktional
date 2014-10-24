@@ -174,17 +174,16 @@
 ; ##############################################################################
 
 ;; Berechnet die Richtung, in der ein Ziel B vom Punkt A aus liegt
-;; anhand der Funktion:
-;;   acos( ( sin(br B) - cos(zentriwinkel) * sin(br A) ) / ( cos(br A) * sin(zentriwinkel) ) )
 (define (anfangskurs breitengradA laengengradA breitengradB laengengradB)
-  ( let ( [winkel (richtungswinkel breitengradA laengengradA breitengradB laengengradB)]
-           )
-    (+)
+  ( let ( [winkel (richtungswinkel breitengradA laengengradA breitengradB laengengradB)] )
+    winkel
   )
 )
 
 ;; Hilfsmethode
 ;; Berechnet den Richtungswinkel von Punkt A Richtung Punkt B
+;; anhand der Funktion:
+;;   acos( ( sin(br B) - cos(zentriwinkel) * sin(br A) ) / ( cos(br A) * sin(zentriwinkel) ) )
 (define (richtungswinkel breitengradA laengengradA breitengradB laengengradB)
   ( radians->degrees  
     ( my-acos
@@ -226,9 +225,9 @@
 )
 
 ; Beispielaufruf:
-; ( richtungswinkel  59.93   10.75  22.20  114.10 )  ; Oslo - Honkong
-; ( richtungswinkel  37.75 -122.45  21.32 -157.83 )  ; San Francisco - Honolulu
-; ( richtungswinkel -27.10 -109.40 -12.10  -77.05 )  ; Osterinseln - Lima
+; ( anfangskurs  59.93   10.75  22.20  114.10 )  ; Oslo - Honkong
+; ( anfangskurs  37.75 -122.45  21.32 -157.83 )  ; San Francisco - Honolulu
+; ( anfangskurs -27.10 -109.40 -12.10  -77.05 )  ; Osterinseln - Lima
 
 
 
@@ -237,7 +236,55 @@
 ; ## Aufgabe 2.3 ###############################################################
 ; ##############################################################################
 
+;; Konvertiert eine Gradzahl in eine Himmelsrichtung
 (define (grad->himmelsrichtung grad)
-  ( grad )
+  ( cond [ ( > grad 360 ) ( error "Gradzahl ist zu Groß" ) ]
+         [ ( or ( <= grad 11.25 ) ( > grad 348.75 ) ) "N" ]
+         [ ( <= grad 33.75 )  "NNE" ]
+         [ ( <= grad 56.25 )  "NE" ]
+         [ ( <= grad 78.75 )  "ENE" ]
+         [ ( <= grad 101.25 ) "E" ]
+         [ ( <= grad 123.75 ) "ESE" ]
+         [ ( <= grad 146.25 ) "SE" ]
+         [ ( <= grad 168.75 ) "SSE" ]
+         [ ( <= grad 191.25 ) "S" ]
+         [ ( <= grad 213.75 ) "SSW" ]
+         [ ( <= grad 236.25 ) "SW" ]
+         [ ( <= grad 258.75 ) "WSW" ]
+         [ ( <= grad 281.25 ) "W" ]
+         [ ( <= grad 303.75 ) "WNW" ]
+         [ ( <= grad 326.25 ) "NW" ]
+         [ ( <= grad 348.75 ) "NNW" ]
+  )
 )
 
+;; Konvertiert eine Himmelsrichtung zu einer Gradzahl
+(define (himmelsrichtung->grad himmelsrichtung)
+  ( cond [ ( string=? himmelsrichtung "N" )   0     ]
+         [ ( string=? himmelsrichtung "NNE" ) 22.5  ]
+         [ ( string=? himmelsrichtung "NE" )  45    ]
+         [ ( string=? himmelsrichtung "ENE" ) 67.5  ]
+         [ ( string=? himmelsrichtung "E" )   90    ]
+         [ ( string=? himmelsrichtung "ESE" ) 112.5 ]
+         [ ( string=? himmelsrichtung "SE" )  135   ]
+         [ ( string=? himmelsrichtung "SSE" ) 157.5 ]
+         [ ( string=? himmelsrichtung "S" )   180   ]
+         [ ( string=? himmelsrichtung "SSW" ) 202.5 ]
+         [ ( string=? himmelsrichtung "SW" )  225   ]
+         [ ( string=? himmelsrichtung "WSW" ) 247.5 ]
+         [ ( string=? himmelsrichtung "W" )   270   ]
+         [ ( string=? himmelsrichtung "WNW" ) 292.5 ]
+         [ ( string=? himmelsrichtung "NW" )  315   ]
+         [ ( string=? himmelsrichtung "NNW" ) 337.5 ]
+  )
+)
+
+; Beispielaufruf:
+; ( displayln ( grad->himmelsrichtung 0 ) )
+; ( for ( [i 16] )
+;    ( displayln ( grad->himmelsrichtung ( * 22.5 i ) ) )
+; )
+; ( displayln ( himmelsrichtung->grad "N" ) )
+; ( for ( [i 16] )
+;    ( displayln ( himmelsrichtung->grad ( grad->himmelsrichtung ( * 22.5 i ) ) ) )
+; )
