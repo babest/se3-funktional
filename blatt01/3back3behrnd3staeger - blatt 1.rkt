@@ -1,5 +1,15 @@
 #lang racket
 
+#|
+  SE3 Funktionale Programmierung Uni Hamburg
+  Aufgabenblatt 01
+  Eingereicht von
+    Timon Back (3back)
+    Fabien Behrendt (3behrend)
+    Nicolai Stäger (3staeger)
+|#
+
+
 ; Aufgabe 1.1
 ; ------------------------------------------------------------------------------
 
@@ -86,7 +96,7 @@
 ; Berechnet die Entfernung zweier Punkte auf der Erde in Kilometer
 ; Beispielaufruf:
 ;   Oslo - Honkong           : (distanzAB 59.93 10.75 22.2 114.1)
-;   San Francisco - Honolulu : (distanzAB 22.2 114.1 37.75 -122.45)
+;   San Francisco - Honolulu : (distanzAB 37.75 -122.45 21.32 -157.83)
 ;   Osterinseln - Lima       : (distanzAB -27.1 -109.4 -12.1 -77.05)
 (define (distanzAB breitengradA laengengradA breitengradB laengengradB)
   ; von Seemeilen in Kilometer umrechnen
@@ -140,7 +150,8 @@
 ; Aufgabe 2.2
 ; ------------------------------------------------------------------------------
 
-; Berechnet die Richtung, in der ein Ziel B vom Punkt A aus liegt anhand der Funktion
+; Berechnet die Richtung, in der ein Ziel B vom Punkt A aus liegt
+; anhand der Funktion:
 ;   acos( ( sin(br B) - cos(zentriwinkel) * sin(br A) ) / ( cos(br A) * sin(zentriwinkel) ) )
 ; Beispielaufruf:
 ;   Oslo - Honkong     : (anfangskurs 59.93 10.75 22.2 114.1)
