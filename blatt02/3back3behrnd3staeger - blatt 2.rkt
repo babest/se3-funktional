@@ -146,6 +146,7 @@
 ; ##############################################################################
 
 ;; Berechnet die Potenz r^n
+;; Dabei ist r eine Rationale Zahl und n eine Natürliche Zahl
 (define (power r n)
   ( if
     ( zero? n )  ; Ist n==0 ?
@@ -186,6 +187,77 @@
 ; ## Aufgabe 2.3 ###############################################################
 ; ##############################################################################
 
+;; Gibt die Eulerzahl bis auf 1000 Stellen genau zurück
+(define (eulerzahl)
+  ( /
+    ( euler
+      0
+      ( /
+        1
+        ( power 10 1000 )
+      )
+    )
+    2
+  )
+)
+
+;; Hilfsmethode
+;; Berechnet die 2-fache Eulerzahl e ab dem Summanden acc bis
+;; zu einer Genauigkeit von summand <= precision
+(define (euler acc precision)
+  ( let*
+    (
+      [ acc! ( fakultaet acc ) ]  ; acc! ist die Fakultät von acc
+      [ summand ( / ( add1 acc ) acc! ) ]  ; summand/glied der Reihe ist (acc+1)/(acc!)
+    )
+    ( if
+      ( <  ; Ist der aktuelle Summand kleiner als 1/(10^1000)?
+        summand
+        precision
+      )
+      summand  ; Wenn ja, dann einfach nur den Summanden zurückgeben
+      ( +  ; Wenn nein, dann addieren wir zu diesem Summanden alle, die kleiner sind als dieser
+        summand
+        ( euler
+          ( add1 acc )
+          precision
+        )
+      )
+    )
+  )
+)
+
+; Beispielaufruf
+;( * ( eulerzahl ) ( power 10 1001 ) )
 
 
+
+; ##############################################################################
+; ## Aufgabe 2.4 ###############################################################
+; ##############################################################################
+
+(define (pi)
+ ( *
+   (pi-partial 0 100)
+   4
+ )
+)
+(define (pi-partial step max-steps)
+  ( let*
+    (
+      [ vorzeichen ( if (even? step) 1 -1 ) ]
+      [ summand ( * ( / 1 (add1 ( * step 2 ) ) ) vorzeichen ) ]
+    )
+    ( if
+      ( < step max-steps )
+      ( +
+        summand
+        ( pi-partial ( add1 step ) max-steps )
+      )
+      summand
+    )
+  )
+)
+
+(* (pi) ( power 10 1000 ) )
 
