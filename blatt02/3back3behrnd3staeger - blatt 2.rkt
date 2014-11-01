@@ -261,3 +261,31 @@
 
 (* (pi) ( power 10 1000 ) )
 
+; ##############################################################################
+; ## Aufgabe 3 #################################################################
+; ##############################################################################
+
+(define (type-of input)
+  (cond
+    [(boolean? input)   "Boolean"]
+    [(pair? input)      "Pair"]
+    [(list? input)      "List"]
+    [(symbol? input)    "Symbol"]
+    [(number? input)    "Number"]
+    [(char? input)      "Char"]
+    [(string? input)    "String"]
+    [(vector? input)    "Vector"]
+    [(procedure? input) "Procedure"]
+  )
+)
+
+;( type-of ( * 2 3 4 ) ) ; Number. Ist schließlich eine Multiplikation
+;( type-of ( not 42) )   ; Boolean. not gibt nur boolsche Werte zurück
+;( type-of '( eins zwei drei ) ) ; Pair. Eine Liste besteht immer aus Paaren. (Ist auch gleichzeitig eine Liste)
+;( type-of ' ( ) )       ; List. Diese Liste enthält keine Elemente (leere Liste). Somit auch keine Paare. Deswegen ist dies 'nur' eine Liste
+;( define ( id z ) z )   ; Kurz die Identität definieren
+;( type-of ( id sin ) )  ; procedure. Sin (auch über die Identität) bleibt eine Funktion.
+;( type-of ( string-ref "Harry Potter und der Stein der Weisen" 3)) ; char. Das 3. Element (r) aus dem String ist ein Zeichen.
+;( type-of ( lambda ( x ) x ) ) ; procedure. Lambda ist eine Funktion. Somit eine Procedure. (Wird nicht definiert. Somit nicht global nutzbar)
+;( type-of type-of )     ; procedure. type-of ist eine Funktion. Somit procedure
+;( type-of ( type-of type-of ) ) ; String. Wie eben, nur jetzt wird die Rückgabe "procedure" geprüpft, welches ein String ist.
