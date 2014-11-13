@@ -265,6 +265,7 @@
 ; ## Aufgabe 3 #################################################################
 ; ##############################################################################
 ;KOMMENTAR: 4 Pkt
+; Pair und Liste müssen getauscht werden, weil jede Liste auch ein Pair ist.
 (define (type-of input)
   (cond
     [(boolean? input)   "Boolean"]
