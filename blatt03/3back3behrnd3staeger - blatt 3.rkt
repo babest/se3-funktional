@@ -21,43 +21,43 @@
 
 (define BuchstabierTafel 
   '(
-    (A Alfa)
-    (T Tango)
-    (B Bravo)
-    (U Uniform)
-    (C Charlie)
-    (V Viktor)
-    (D Delta)
-    (W Whiskey)
-    (E Echo)
-    (X X-ray)
-    (F Foxtrott)
-    (Y Yankee)
-    (G Golf)
-    (Z Zulu)
-    (H Hotel)
+    (#\A Alfa)
+    (#\T Tango)
+    (#\B Bravo)
+    (#\U Uniform)
+    (#\C Charlie)
+    (#\V Viktor)
+    (#\D Delta)
+    (#\W Whiskey)
+    (#\E Echo)
+    (#\X X-ray)
+    (#\F Foxtrott)
+    (#\Y Yankee)
+    (#\G Golf)
+    (#\Z Zulu)
+    (#\H Hotel)
     (0 Nadazero)
-    (I India)
+    (#\I India)
     (1 Unaone)
-    (J Juliett)
+    (#\J Juliett)
     (2 Bissotwo)
-    (K Kilo)
+    (#\K Kilo)
     (3 Terrathree)
-    (L Lima)
+    (#\L Lima)
     (4 Kartefour)
-    (M Mike)
+    (#\M Mike)
     (5 Pantafive)
-    (N November)
+    (#\N November)
     (6 Soxisix)
-    (O Oscar)
+    (#\O Oscar)
     (7 Setteseven)
-    (P Papa)
+    (#\P Papa)
     (8 Oktoeight)
-    (Q Quebec)
+    (#\Q Quebec)
     (9 Novenine)
-    (R Romeo)
+    (#\R Romeo)
     ("," Decimal)
-    (S Sierra)
+    (#\S Sierra)
     ("." Stop)
     )
   )
@@ -69,16 +69,16 @@
 ; ## Aufgabe 1.2 ###############################################################
 ; ##############################################################################
 
-;Gibt den Schlüssel zu einem Symbol aus 'BuchstabierTafel' zurück
+; Gibt den Schlüssel zu einem Symbol aus 'BuchstabierTafel' zurück
 (define (Buchstabe->tafelwort Buchstabe)
   (
    cdr (assoc Buchstabe BuchstabierTafel)
        )
   )
 
-;(Buchstabe->tafelwort 'B) ; -> '(Bravo)
-;(Buchstabe->tafelwort 1)  ; -> '(Unaone)
-;(Buchstabe->tafelwort ".") ;-> '(Stop)
+;(Buchstabe->tafelwort #\B) ; -> '(Bravo)
+;(Buchstabe->tafelwort 1)   ; -> '(Unaone)
+;(Buchstabe->tafelwort ".") ; -> '(Stop)
 
 ; ##############################################################################
 ; ## Aufgabe 1.3 ###############################################################
@@ -87,33 +87,27 @@
   (
    Buchstabe->tafelwort ; Benutzt die vorhandene Funktion, allerdings eventuell mit anderen Parameter
    (
-    if (symbol? buchstabe)
-       ; Buchstabe ist ein Symbol (vielleicht ein kleiner Buchstabe?)
-       ( let*
-            (
-             ; in b den ersten Buchstaben aus dem Symbol als char speichern
-             [b (string-ref (symbol->string buchstabe) 0)]
-             )
-          (
-           if (char-lower-case? b) 
+    if (char? buchstabe)
+       (
+       ; Buchstabe ist ein Char (vielleicht ein kleiner Buchstabe?)
+           if (char-lower-case? buchstabe) 
               ; b ist klein geschrieben.
-              ; Dann b zu einem Großbuchstaben machen, ein String daraus erzeugen und in ein Symbol umwandeln
+              ; Dann b zu einem Großbuchstaben machen.
               ; Kann dann an die Buchstabe->tafelwort übergeben werden
-              (string->symbol (make-string 1 (char-upcase b)))
-              ; b ist groß geschrieben. Parameter kann einfach weiter gereicht werden
+              (char-upcase buchstabe)
+              ; b ist bereits groß geschrieben. Parameter kann einfach weiter gereicht werden
               buchstabe
-              )
           )
-       ; Buchstabe ist kein Symbol (also eine Zahl oder . ,). Parameter kann einfach weiter gereicht werden.
+       ; Buchstabe ist kein Char (also eine Zahl oder . ,). Parameter kann einfach weiter gereicht werden.
        buchstabe
        )
    )
   )
 
-;(buchstabe->tafelwort 'B) ; -> '(Bravo)
-;(buchstabe->tafelwort 'b) ; -> '(Bravo)
-;(buchstabe->tafelwort 1)  ; -> '(Unaone)
-;(buchstabe->tafelwort "."); -> '(Stop)
+;(buchstabe->tafelwort #\B) ; -> '(Bravo)
+;(buchstabe->tafelwort #\b) ; -> '(Bravo)
+;(buchstabe->tafelwort 1)   ; -> '(Unaone)
+;(buchstabe->tafelwort ".") ; -> '(Stop)
 
 
 ; ##############################################################################
@@ -132,11 +126,8 @@
     cons 
     ; Dem aktuellen Buchstaben, welcher in das tafelwort 'übersetzt' werden muss
     (buchstabe->tafelwort 
-     ; unter Berücksichtigung des Parameters, welcher ein Symbol ist (char->symbol).
-     (string->symbol (make-string 1  
-                                  ; (Der aktuelle Buchstabe ist das erste Element von charlist)
-                                  (car charlist)
-                                  ))
+     ; unter Berücksichtigung des Parameters, welcher der erste Eintrag in der Liste ist.
+     (car charlist)
      )
     ; Zweites Element der neuen Liste ist der rekursive Aufruf mit dem Rest der Liste
     (charlist->tafelwort (cdr charlist))
@@ -152,3 +143,11 @@
   )
 
 ;(wort->tafelwort "Racket") ; '((Romeo) (Alfa) (Charlie) (Kilo) (Echo) (Tango))
+
+
+
+(require se3-bib/flaggen-module)
+;(require flaggen-module)
+; ##############################################################################
+; ## Aufgabe 2.1 ###############################################################
+; ##############################################################################
