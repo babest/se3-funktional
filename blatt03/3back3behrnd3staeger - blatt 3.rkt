@@ -73,12 +73,12 @@
 ; Gibt den Schlüssel zu einem Char aus 'BuchstabierTafel' zurück
 (define (Buchstabe->tafelwort Buchstabe)
   (
-   car
-   (
-    cdr (assoc Buchstabe BuchstabierTafel)
-        )
-   )
+    car
+    (
+      cdr (assoc Buchstabe BuchstabierTafel)
+    )
   )
+)
 
 ;(Buchstabe->tafelwort #\B) ; -> '(Bravo)
 ;(Buchstabe->tafelwort 1)   ; -> '(Unaone)
@@ -157,7 +157,7 @@
 
 
 
-(require se3-bib/flaggen-module)
+;(require se3-bib/flaggen-module)
 ;(require flaggen-module)
 ; ##############################################################################
 ; ## Aufgabe 2.1 ###############################################################
