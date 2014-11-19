@@ -13,12 +13,13 @@
   und können einfach auskommentiert werden.
 |#
 
-
+;KOMMENTAR: 25 / 35 Punkte
 
 ; ##############################################################################
 ; ## Aufgabe 1.1 ###############################################################
 ; ##############################################################################
-
+;KOMMENTAR: 3 Pkt
+;Schöner, wenn alle Elemente vom Typ char sind!
 (define BuchstabierTafel 
   '(
     (#\A Alfa)
@@ -71,7 +72,7 @@
 ; ##############################################################################
 ; ## Aufgabe 1.2 ###############################################################
 ; ##############################################################################
-
+;KOMMENTAR: 4 Pkt
 ; Gibt den Schlüssel zu einem Char aus 'BuchstabierTafel' zurück
 (define (Buchstabe->tafelwort Buchstabe)
   ( cadr
@@ -88,6 +89,7 @@
 ; ##############################################################################
 ; ## Aufgabe 1.3 ###############################################################
 ; ##############################################################################
+;KOMMENTAR: 5 Pkt
 (define (buchstabe->tafelwort buchstabe)
   ( Buchstabe->tafelwort ; Benutzt die vorhandene Funktion, allerdings eventuell mit anderen Parameter
     ( if
@@ -118,7 +120,9 @@
 ; ##############################################################################
 ; ## Aufgabe 1.4 ###############################################################
 ; ##############################################################################
-
+;KOMMENTAR: Hier crasht das Programm, sobald Zahlen oder Sonderzeichen verwendet werden!
+;KOMMENTAR: Mehr testen!
+;KOMMENTAR: 5 Pkt
 ; Wandelt eine Liste von Chars in die dazugehörigen Buchstabentafel-Liste (rekursive Funktion)
 (define (charlist->tafelwort charlist) ; charList = Die List der Buchstaben (char) die umgewandelt werden sollen.
   (
@@ -159,7 +163,8 @@
 ; ##############################################################################
 ; ## Aufgabe 2.1 ###############################################################
 ; ##############################################################################
-
+;KOMMENTAR: Auch hier verwendet ihr unterschiedliche Typen!
+;KOMMENTAR: 2 Pkt
 (define FlaggenTafel 
   '(
     (#\A A)
@@ -210,7 +215,8 @@
 ; ##############################################################################
 ; ## Aufgabe 2.2 ###############################################################
 ; ##############################################################################
-
+;KOMMENTAR: Wenn schöner programmiert, dann funktioniert das auch richtig!
+;KOMMENTAR: 1 Pkt
 ; Gibt den Schlüssel zu einem Char aus FlaggenTafel zurück
 (define (Buchstabe->flagge Buchstabe)
   ( eval
@@ -230,7 +236,9 @@
 ; ##############################################################################
 ; ## Aufgabe 2.3 ###############################################################
 ; ##############################################################################
-
+;KOMMENTAR: Hier crasht das Programm, sobald Zahlen oder Sonderzeichen verwendet werden!
+;KOMMENTAR: Mehr testen oder Fehlerbehandlung einführen.
+;KOMMENTAR: 5 Pkt
 ; Wandelt eine Liste von Chars in die dazugehörigen Buchstabentafel-Liste (rekursive Funktion)
 ; @param charList
 ;            Die List der Buchstaben (char) die umgewandelt werden sollen.
