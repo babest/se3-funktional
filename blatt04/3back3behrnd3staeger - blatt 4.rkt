@@ -3,7 +3,10 @@
 #|
   SE3 Funktionale Programmierung
   WiSe 2014, Uni Hamburg
+  
+  Gruppe 11, Do. 18:15
   Aufgabenblatt 04
+  
   Eingereicht von
     Timon Back (3back)
     Fabian Behrendt (3behrend)
@@ -16,7 +19,7 @@
 
 
 ; ##############################################################################
-; ## Aufgabe 1   ###############################################################
+; ## Aufgabe 1 #################################################################
 ; ##############################################################################
 
 ;(max (min 2 (- 2 5)) 0)
@@ -62,3 +65,47 @@
 (eq? (list 'Racket 'Prolog 'Java) (cons 'Racket '(Prolog Java)))
 ; #f
 ; Die beiden Listen sind allerdings nicht referenzgleich (eq). Es liegen zwei Listen im Speicher.
+
+
+
+; ##############################################################################
+; ## Aufgabe 2.1 ###############################################################
+; ##############################################################################
+
+#|
+
+<Notmeldung>      ::= <Überschrift> <Standortangabe> <Art> <weiterAngaben> <Peilzeichen> <Unterschrift> <Over>
+
+<Überschrift>     ::= <Notzeichen> <Notzeichen> <Notzeichen>
+                      Hier ist
+                      <Schiffsname> <Schiffsname> <Schiffsname>
+                      <RufzeichenB>
+                      <Notzeichen> <SchiffsnameB> <RufzeichenB>
+<Standaortangabe> ::= <Satz>
+<Art>             ::= <Satz>
+<weiterAngabe>    ::= <Satz>
+<Peilzeichen>     ::= <Satz>
+<Unterschrift>    ::= <Notzeichen> <Schiffsname> <SchiffsnameB> <RufzeichenB>
+
+<Notzeichen>   ::= "MAYDAY"
+<Schiffsname>  ::= <Wort>
+<SchiffsnameB> ::= <WortBuchstabiert>
+<RufzeichenB>  ::= <WortBuchstabiert>
+
+<Wort>              ::=  | <Buchstabe> <Wort>
+<Satz>              ::=  | " "<Satz> | <Wort><Satz>
+<Buchstabe>         ::= A | B | C | D | ... | Z | a | b | ... | z
+<WortBuchstabiert>  ::=  | <CodeWort> <WortBuchtstabiert>
+<CodeWort>          ::= Alfa | Bravo | Charlie | ... | Novenine | Decimal | Stop
+
+|#
+
+
+
+
+
+
+
+
+
+
