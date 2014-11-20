@@ -74,23 +74,24 @@
 
 #|
 
-<Notmeldung>      ::= <Überschrift> <Standortangabe> <Art> <weiterAngaben> <Peilzeichen> <Unterschrift> <Over>
+<Notmeldung>        ::= <Überschrift> <Standortangabe> <Art> <weiterAngaben> <Peilzeichen> <Unterschrift> <Over>
 
-<Überschrift>     ::= <Notzeichen> <Notzeichen> <Notzeichen>
-                      Hier ist
-                      <Schiffsname> <Schiffsname> <Schiffsname>
-                      <RufzeichenB>
-                      <Notzeichen> <SchiffsnameB> <RufzeichenB>
-<Standaortangabe> ::= <Satz>
-<Art>             ::= <Satz>
-<weiterAngabe>    ::= <Satz>
-<Peilzeichen>     ::= <Satz>
-<Unterschrift>    ::= <Notzeichen> <Schiffsname> <SchiffsnameB> <RufzeichenB>
+<Überschrift>       ::= <Notzeichen> <Notzeichen> <Notzeichen>
+                        Hier ist
+                        <Schiffsname> <Schiffsname> <Schiffsname>
+                        <RufzeichenB>
+                        <Notzeichen> <SchiffsnameB> <RufzeichenB>
+<Standaortangabe>   ::= <Satz>
+<Art>               ::= <Satz>
+<weiterAngabe>      ::= <Satz>
+<Peilzeichen>       ::= <Satz>
+<Unterschrift>      ::= <Notzeichen> <Schiffsname> <SchiffsnameB> <RufzeichenB>
+<Over>              ::= "OVER"
 
-<Notzeichen>   ::= "MAYDAY"
-<Schiffsname>  ::= <Wort>
-<SchiffsnameB> ::= <WortBuchstabiert>
-<RufzeichenB>  ::= <WortBuchstabiert>
+<Notzeichen>        ::= "MAYDAY"
+<Schiffsname>       ::= <Wort>
+<SchiffsnameB>      ::= <WortBuchstabiert>
+<RufzeichenB>       ::= <WortBuchstabiert>
 
 <Wort>              ::=  | <Buchstabe> <Wort>
 <Satz>              ::=  | " "<Satz> | <Wort><Satz>
@@ -102,9 +103,50 @@
 
 
 
+; ##############################################################################
+; ## Aufgabe 2.2 ###############################################################
+; ##############################################################################
+
+;; Gibt die Notmeldung aus
+(define (notmeldung schiffsname rufzeichen position zeit art weitereAngaben)
+  ( ueberschrift schiffsname rufzeichen )
+  )
+
+
+;; Hilfsmethode für die Überschrift
+(define (ueberschrift schiffsname rufzeichen)
+  ( let ( [notzeichen "MAYDAY"] )
+     ( string-append
+       ( repeatString notzeichen 3 )
+       "HIER IST"
+       ( repeatString schiffsname 3 )
+       )
+     )
+  )
+
+
+;; Hilfsmethode
+;; Wiederholt einen String n-mal
+(define (repeatString string n)
+  ( if ( equal? n 1 )
+       string
+       ( string-append
+         string
+         ( if (> n 1) " " "" )  ; Ein Leerzeichen wird nicht nach dem letzten Wort benötigt.
+         ( repeatString string (sub1 n))
+         )
+       )
+  )
 
 
 
+
+( notmeldung "BABETTE"
+             "DEJY"
+             "UNGEFAEHR 10 SM NORDOESTLICH LEUCHTTURM KIEL"
+             "1000 UTC"
+             "SCHWERER WASSEREINBRUCH WIR SINKEN"
+             "KEINE VERLETZTEN ..." )
 
 
 
