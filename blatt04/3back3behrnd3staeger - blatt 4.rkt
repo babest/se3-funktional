@@ -151,3 +151,90 @@
 
 
 
+; ##############################################################################
+; ## Aufgabe 3 #################################################################
+; ##############################################################################
+
+#|
+
+Unterschied zwischen innerer und äußerer Reduktion:
+
+Bei der inneren Reduktion werden die Terme von innen nach außen reduziert, was
+dazu führt, dass zuerst die inneren Klammern bzw. Funktionen ausgewertet werden.
+
+Bei der äußeren Reduktion werden die Terme von außen nach innen reduziert, also
+werden zuerst die äußeren Klammern bzw. Funktionen ausgewertet, worauf die
+inneren folgen.
+
+
+Für (hoch3 (* 3 (+ 1 (hoch3 2))))
+
+mit 
+(define (hoch3 x) (* x x x))
+
+folgt dann:
+
+innere Reduktion:
+
+--> (hoch3 (* 3 (+ 1 (* 2 2 2)))) ;(hoch3)
+--> (hoch3 (* 3 (+ 1 8)))         ;(*)
+--> (hoch3 (* 3 9))               ;(+)
+--> (hoch3 27)                    ;(*)
+--> (* 27 27 27)                  ;(hoch3)
+--> 19683                         ;(*)
+
+
+äußere Reduktion:
+
+--> (* (* 3 (+ 1 (hoch3 2)))
+       (* 3 (+ 1 (hoch3 2)))
+       (* 3 (+ 1 (hoch3 2))))     ;(hoch3)
+--> (* (* 3 (+ 1 (* 2 2 2)))
+       (* 3 (+ 1 (hoch3 2)))
+       (* 3 (+ 1 (hoch3 2))))     ;(hoch3)
+--> (* (* 3 (+ 1 8))
+       (* 3 (+ 1 (hoch3 2)))
+       (* 3 (+ 1 (hoch3 2))))     ;(*)
+--> (* (* 3 9)
+       (* 3 (+ 1 (hoch3 2)))
+       (* 3 (+ 1 (hoch3 2))))     ;(+)
+--> (* 27
+       (* 3 (+ 1 (hoch3 2)))
+       (* 3 (+ 1 (hoch3 2))))     ;(*)
+--> (* 27
+       (* 3 (+ 1 (* 2 2 2)))
+       (* 3 (+ 1 (hoch3 2))))     ;(hoch3)
+--> (* 27
+       (* 3 (+ 1 8))
+       (* 3 (+ 1 (hoch3 2))))     ;(*)
+--> (* 27
+       (* 3 9)
+       (* 3 (+ 1 (hoch3 2))))     ;(+)
+--> (* 27
+       27
+       (* 3 (+ 1 (hoch3 2))))     ;(*)
+--> (* 27
+       27
+       (* 3 (+ 1 (* 2 2 2))))     ;(hoch3)
+--> (* 27
+       27
+       (* 3 (+ 1 8)))             ;(*)
+--> (* 27
+       27
+       (* 3 9))                   ;(+)
+--> (* 27
+       27
+       27)                        ;(*)
+--> 19683                         ;(*)
+
+
+In Racket wird für Funktionen die innere Reduktion und für
+Spezialformen (wie z.B. für if-Abfragen) die äußere Reduktion angewendet.
+
+
+Bei selbstgeschriebenen Funktionen arbeitet Racket nach der inneren Reduktion,
+was bei dem new-if in der Funktion faculty zu einem unnötig höheren Rechen-
+aufwand führen würde, da die else-clause berechnet werden würde, bevor geprüft wird,
+ob dieser Fall eintritt.
+
+|#
