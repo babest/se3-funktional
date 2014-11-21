@@ -74,14 +74,14 @@
 
 #|
 
-<Notmeldung>        ::= <Überschrift> <Standortangabe> <Art> <weiterAngaben> <Peilzeichen> <Unterschrift> <Over>
+<Notmeldung>        ::= <Überschrift> <Standortangabe> <Art> <weiterAngaben> -- <Unterschrift> <Over>
 
 <Überschrift>       ::= <Notzeichen> <Notzeichen> <Notzeichen>
                         Hier ist
                         <Schiffsname> <Schiffsname> <Schiffsname>
                         <RufzeichenB>
                         <Notzeichen> <SchiffsnameB> <RufzeichenB>
-<Standaortangabe>   ::= <Satz>
+<Standortangabe>    ::= <Satz>
 <Art>               ::= <Satz>
 <weiterAngabe>      ::= <Satz>
 <Peilzeichen>       ::= <Satz>
@@ -104,28 +104,87 @@
 
 
 ; ##############################################################################
-; ## Aufgabe 2.2 ###############################################################
+; ## Funktion aus dem letztem Blatt ############################################
+
+(define BuchstabierTafel 
+  '(
+    (#\A "Alfa")
+    (#\T "Tango")
+    (#\B "Bravo")
+    (#\U "Uniform")
+    (#\C "Charlie")
+    (#\V "Viktor")
+    (#\D "Delta")
+    (#\W "Whiskey")
+    (#\E "Echo")
+    (#\X "X-ray")
+    (#\F "Foxtrott")
+    (#\Y "Yankee")
+    (#\G "Golf")
+    (#\Z "Zulu")
+    (#\H "Hotel")
+    (#\0 "Nadazero")
+    (#\I "India")
+    (#\1 "Unaone")
+    (#\J "Juliett")
+    (#\2 "Bissotwo")
+    (#\K "Kilo")
+    (#\3 "Terrathree")
+    (#\L "Lima")
+    (#\4 "Kartefour")
+    (#\M "Mike")
+    (#\5 "Pantafive")
+    (#\N "November")
+    (#\6 "Soxisix")
+    (#\O "Oscar")
+    (#\7 "Setteseven")
+    (#\P "Papa")
+    (#\8 "Oktoeight")
+    (#\Q "Quebec")
+    (#\9 "Novenine")
+    (#\R "Romeo")
+    (#\, "Decimal")
+    (#\S "Sierra")
+    (#\. "Stop")
+    )
+  )
+; Gibt den Schlüssel zu einem Char aus 'BuchstabierTafel' zurück
+(define (Buchstabe->tafelwort Buchstabe)
+  ( cadr
+    (assoc Buchstabe BuchstabierTafel)
+  )
+)
+(define (charlist->tafelwort charlist) ; charList = Die List der Buchstaben (char) die umgewandelt werden sollen.
+  (
+   if (empty? charlist)
+    ; Es gibt keine weiteren Buchstaben, also eine leere Liste zurückgeben
+    '()
+    ; Sonst:
+    (
+      ; Eine Liste erstellen aus:
+      cons 
+      ; Dem aktuellen Buchstaben, welcher in das tafelwort 'übersetzt' werden muss
+      (Buchstabe->tafelwort 
+        ; unter Berücksichtigung des Parameters, welcher der erste Eintrag in der Liste ist.
+        (car charlist)
+      )
+      ; Zweites Element der neuen Liste ist der rekursive Aufruf mit dem Rest der Liste
+      (charlist->tafelwort (cdr charlist))
+    )
+  )
+)
+; Wandelt einen String in eine Liste von Chars
+(define (wort->tafelwort wort) ; wort = Ein String, der 'übersetzt' wird.
+  (
+    charlist->tafelwort (string->list wort)
+  )
+)
+
+
 ; ##############################################################################
+; ## Aufgabe 2.2 ###############################################################
 
-;; Gibt die Notmeldung aus
-(define (notmeldung schiffsname rufzeichen position zeit art weitereAngaben)
-  ( ueberschrift schiffsname rufzeichen )
-  )
-
-
-;; Hilfsmethode für die Überschrift
-(define (ueberschrift schiffsname rufzeichen)
-  ( let ( [notzeichen "MAYDAY"] )
-     ( string-append
-       ( repeatString notzeichen 3 )
-       "HIER IST"
-       ( repeatString schiffsname 3 )
-       )
-     )
-  )
-
-
-;; Hilfsmethode
+;; allgemeine Hilfsmethode
 ;; Wiederholt einen String n-mal
 (define (repeatString string n)
   ( if ( equal? n 1 )
@@ -138,15 +197,117 @@
        )
   )
 
+; #################################################################
+;; Gibt die Notmeldung aus
+(define (notmeldung schiffsname rufzeichen position zeit art weitereAngaben)
+  (string-append
+    ( ueberschrift schiffsname rufzeichen )
+    ( standortangabe position)
+    ( zeitangabe zeit)
+    ( artangabe art)
+    ( extraangabe weitereAngaben)
+    ( peilzeichen )
+    ( unterschrift schiffsname rufzeichen )
+    ( over )
+  )
+)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Hilfsmethoden (Umsetzung der Backus-Naur-Form)
 
+;; Hilfsmethode für die Überschrift
+(define (ueberschrift schiffsname rufzeichen)
+  ( let ( [notzeichen "MAYDAY"] )
+     (string-append
+       
+       ( repeatString notzeichen 3 )
+       
+       "\nHIER IST \n"
+       
+       ( repeatString schiffsname 3 )
+       " "
+       ( string-join ( wort->tafelwort rufzeichen ) " " )
+       "\n"
+       
+       notzeichen
+       " "
+       schiffsname
+       " ICH BUCHSTABIERE "
+       ( string-join ( wort->tafelwort schiffsname ) " " )
+       
+       "\nRUFZEICHEN "
+       ( string-join ( wort->tafelwort rufzeichen ) " " )
+       )
+     )
+  )
+; Hilfsmethode für den Standort
+(define (standortangabe standort) 
+  (string-append
+   "\nNOTFALLPOSITION " 
+   standort
+  )
+)
+; Hilfsmethode für die Zeit
+(define (zeitangabe zeit) 
+  (string-append
+   "\nNOTFALLZEIT " 
+   zeit
+  )
+)
+; Hilfsmethode für die Art
+(define (artangabe art) 
+  (string-append
+   "\n"
+   art
+  )
+)
+; Hilfsmethode für weitere Angaben (erwartet eine Liste)
+(define (extraangabe weitereAngaben)
+  (string-append
+   "\n"
+   (string-join weitereAngaben "\n")
+  )
+)
+; Hilfsmethode fürs Peilzeichen
+(define (peilzeichen) 
+  " --\n"
+)
+; Hilfsmethode für die Unterschrift
+(define (unterschrift schiffsname rufzeichen)       
+  (string-append
+   schiffsname
+   " "
+   ( string-join ( wort->tafelwort rufzeichen ) " " )
+  )
+)
+; Hilfsmethode fürs Over
+(define (over) 
+  "\nOVER"
+)
 
-( notmeldung "BABETTE"
+; ##############################################################################
+; Aufruf für Babette
+(display ( notmeldung "BABETTE"
              "DEJY"
              "UNGEFAEHR 10 SM NORDOESTLICH LEUCHTTURM KIEL"
              "1000 UTC"
              "SCHWERER WASSEREINBRUCH WIR SINKEN"
-             "KEINE VERLETZTEN ..." )
+             '("KEINE VERLETZTEN" "VIER MANN GEHEN IN DIE RETTUNGSINSEL"
+"SCHNELLE HILFE ERFORDERLICH" "ICH SENDE DEN TRAEGER") )
+)
+
+(display "\n\n")
+; ##############################################################################
+; Aufgaben 2.3
+; Aufruf für Amira
+(display ( notmeldung "AMIRA"
+             "AMRY"
+             "UNGEFAEHR AUF DER HOEHE 53°56'N UND DER BREITE 006°31'E"
+             "1640 UTC"
+             "NACH KENTERGANG AM SINKEN"
+             '("15 MANN AN BORD" "DAS SCHIFF IS 15M LANG"
+"ROTER RUMPF") )
+)
 
 
 
