@@ -105,6 +105,7 @@
 
 ; ##############################################################################
 ; ## Funktion aus dem letztem Blatt ############################################
+; ##############################################################################
 
 (define BuchstabierTafel 
   '(
@@ -183,6 +184,7 @@
 
 ; ##############################################################################
 ; ## Aufgabe 2.2 ###############################################################
+; ##############################################################################
 
 ;; allgemeine Hilfsmethode
 ;; Wiederholt einen String n-mal
@@ -197,7 +199,6 @@
        )
   )
 
-; #################################################################
 ;; Gibt die Notmeldung aus
 (define (notmeldung schiffsname rufzeichen position zeit art weitereAngaben)
   (string-append
@@ -212,8 +213,7 @@
   )
 )
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Hilfsmethoden (Umsetzung der Backus-Naur-Form)
+; Hilfsmethoden (Umsetzung der Backus-Naur-Form)
 
 ;; Hilfsmethode für die Überschrift
 (define (ueberschrift schiffsname rufzeichen)
@@ -285,28 +285,37 @@
   "\nOVER"
 )
 
+
+
+
 ; ##############################################################################
+; Aufgaben 2.3  ################################################################
+; ##############################################################################
+
 ; Aufruf für Babette
 (display ( notmeldung "BABETTE"
              "DEJY"
              "UNGEFAEHR 10 SM NORDOESTLICH LEUCHTTURM KIEL"
              "1000 UTC"
              "SCHWERER WASSEREINBRUCH WIR SINKEN"
-             '("KEINE VERLETZTEN" "VIER MANN GEHEN IN DIE RETTUNGSINSEL"
-"SCHNELLE HILFE ERFORDERLICH" "ICH SENDE DEN TRAEGER") )
+             '("KEINE VERLETZTEN"
+               "VIER MANN GEHEN IN DIE RETTUNGSINSEL"
+               "SCHNELLE HILFE ERFORDERLICH" "ICH SENDE DEN TRAEGER")
+             )
 )
 
 (display "\n\n")
-; ##############################################################################
-; Aufgaben 2.3
+
 ; Aufruf für Amira
 (display ( notmeldung "AMIRA"
              "AMRY"
              "UNGEFAEHR AUF DER HOEHE 53°56'N UND DER BREITE 006°31'E"
              "1640 UTC"
              "NACH KENTERGANG AM SINKEN"
-             '("15 MANN AN BORD" "DAS SCHIFF IS 15M LANG"
-"ROTER RUMPF") )
+             '("15 MANN AN BORD"
+               "DAS SCHIFF IS 15M LANG"
+               "ROTER RUMPF")
+             )
 )
 
 
@@ -337,6 +346,7 @@ folgt dann:
 
 innere Reduktion:
 
+--> (hoch3 (* 3 (+ 1 (hoch3 2)))) ;
 --> (hoch3 (* 3 (+ 1 (* 2 2 2)))) ;(hoch3)
 --> (hoch3 (* 3 (+ 1 8)))         ;(*)
 --> (hoch3 (* 3 9))               ;(+)
