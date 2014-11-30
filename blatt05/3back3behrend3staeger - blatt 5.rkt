@@ -93,7 +93,7 @@ und verringert werden.
 
 |#
 
-; ### Implemantation ###########################################################
+; ### Implementation ###########################################################
 (require se3-bib/butterfly-module-2014)
 
 ; Demo from task paper:
