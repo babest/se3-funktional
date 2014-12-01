@@ -23,46 +23,62 @@
 ; ##############################################################################
 
 ; ### Struktur #################################################################
+
 #|
 
 Hinweis: Wenn hier von Eigenschaft und/oder Eigenschaften gesprochen wird, dann 
   sind immer alle 4 'Gene' (Farbe, Musterung, Fühlerform, Flügelform) gemeint.
 
 Gliederung:
+
 1. Bei Aufruf der Hauptfunktion, wir nennen sie mendel, müssen die dominanten
-    Eigenschaften von Mutter und Vater übergeben werden, als auch die Anzahl
-    der zu 'mendelnen' Kinder.
-   Diese Funktion sollte erst mal nur darum kümmern, dass die richtige Anzahl 
-    von Kinder gemendelt werden und das eigentliche mendeln weiter delegieren.
+   Eigenschaften von Mutter und Vater übergeben werden, als auch die Anzahl
+   der zu 'mendelnen' Kinder.
+
+   Diese Funktion sollte sich erst mal nur darum kümmern, dass die richtige Anzahl 
+   von Kinder gemendelt werden und das eigentliche mendeln weiter delegieren.
+
    Achtung: Kinder sind nicht immer Zwillinge, also konkrete rezessive Eigenschaft
             nicht vorberechnen.
-   [In: dominanten Eigenschaften von Mutter und Vater]
+
+   [Input: dominanten Eigenschaften von Mutter und Vater]
+
 2. Das Zeichen von einem Schmetterling wird von einer weiteren Funktion über-
-    nommen, welches die dominanten Eigenschaften von Mutter und Vater übergeben
-    bekommt.
-   [In: dominanten Eigenschaften von Mutter und Vater]
+   nommen, welches die dominanten Eigenschaften von Mutter und Vater übergeben
+   bekommt.
+
+   [Input: dominanten Eigenschaften von Mutter und Vater]
+
 2.2. Aus jeweils den dominanten Eigenschaften müssen die rezessiv möglichen
-      Eigenschaften ermittelt werden unter Beachtung der Vererbungs-/Mendelregeln.
-     [In: dominanten Eigenschaften von Mutter und Vater,
-     Out: Liste der möglichen rezessiven Eigenschaften von Mutter und Vater]
+     Eigenschaften ermittelt werden unter Beachtung der Vererbungs-/Mendelregeln.
+
+     [Input : dominanten Eigenschaften von Mutter und Vater,
+      Output: Liste der möglichen rezessiven Eigenschaften von Mutter und Vater]
+
 2.3. Daraus muss dann zufällig eine Eigenschaft ausgewählt werden.
-     [In: Liste der möglichen rezessiven Eigenschaften von Mutter und Vater
-     Out: Liste von dem rezessiven Gen der jeweiligen Eigenschaften von den Eltern.]
+
+     [Input : Liste der möglichen rezessiven Eigenschaften von Mutter und Vater
+      Output: Liste von dem rezessiven Gen der jeweiligen Eigenschaften von den Eltern.]
+
 2.4. Aus der dominanten und rezessiven Eigenschaft von jeweils Mutter und Vater
-      muss eine Eigenschaft zufällig ausgewählt werden.
-     [In: Liste von den dominanten und rezessiven Genen von jeweils Mutter und Vater.
-     Out: Liste von den vererbenden Eigenschaften der Eltern]
+     muss eine Eigenschaft zufällig ausgewählt werden.
+
+     [Input : Liste von den dominanten und rezessiven Genen von jeweils Mutter und Vater.
+      Output: Liste von den vererbenden Eigenschaften der Eltern]
+
 2.5. Aus den jeweilig zufällig ausgewählt Eigenschaften wird dann die Eigenschaft
-      für das Kind ausgewählt - jetzt wieder unter Beachtung der Vererbungsregeln.
-      (Die dominante Eigenschaft gewinnt).
-     [In: Liste von den vererbenden Eigenschaften der Eltern.
-     Out: Liste von dem ausprägenden Eigenschaften des Kindes]
+     für das Kind ausgewählt - jetzt wieder unter Beachtung der Vererbungsregeln.
+      (Die dominante Eigenschaft gewinnt)
+
+     [Input : Liste von den vererbenden Eigenschaften der Eltern.
+      Output: Liste von den ausprägenden Eigenschaften des Kindes]
+
 2.6. Mit diesen Informationen kann dann show-butterfly aufgerufen werden.
-     [In: Liste von den vererbenden Eigenschaften der Eltern.]
+     [Input: Liste von den vererbenden Eigenschaften der Eltern.]
 
 Für die Teilschritte in 2. können neue Funktionen definiert werden oder vielleicht
-auch einfach ein Let-Block verwendet werden. Das muss von dem Umfang er einzelnen
-Schritte um von In zu Out zu kommen entschieden werden.
+auch einfach ein Let-Block verwendet werden. Das muss von dem Umfang der einzelnen
+Schritte um von Input zum Output zu kommen entschieden werden.
 
 Datenstrukturen:
 1. Dominanzregeln:
@@ -85,7 +101,7 @@ mit einzelnen Eigenschaften UND stellt gleichzeitig die Dominanz der Eigenschaft
 in die richtige Reihenfolge.
 Das Erstellen einer großen mendelRules Liste vereinfacht den Umgang mit allen
 Regeln und vermeidet, dass man jede Eigenschaft einzeln betrachten muss, da so
-Funktionen höher Ordnung verwendet werden kann. Allerdings wird das Programm 
+Funktionen höher Ordnung verwendet werden können. Allerdings wird das Programm 
 dadurch unflexiblerer auf Änderungen bezüglich weiterer Eigenschaften oder einer
 Umsortierung der einzelnen Gene reagieren. Dies betrifft nicht die Reihenfolge
 der Dominanzregeln. Hier kann einfach die Reihenfolge der Gene geändert, ergänzt
@@ -108,7 +124,7 @@ und verringert werden.
   (list-ref l (random (length l))))
 
 ; Grundfunktion
-; Liefert aus das Element aus der needleList zurück, welches als erstes 
+; Liefert das Element aus der needleList zurück, welches als erstes 
 ; in der haystackList gefunden wird oder eben die leere Liste.
 ; (find-first-of '(a b c) '(c b)) -> 'b
 ; (find-first-of '(c a b) '(c b)) -> 'c
@@ -155,7 +171,7 @@ und verringert werden.
         [fatherRecessive (map listPickRandomItem (map member fatherDominant mendelRules ))]
         ; xxxRandom:
         ;  Einfach: Die dominante und rezessive Eigenschaft wird zusammengeworfen und dann
-        ;  ein jeweils eine Eigenschaft zufällig ausgewählt.
+        ;  jeweils eine Eigenschaft zufällig ausgewählt.
         ;  Genauer: Die beiden Listen mit den dominanten und rezessiven Merkmalen werden
         ;  verbunden (map list) und dann wie eben zufällig ein Element heraus gepickt.
         [motherRandom (map listPickRandomItem (map list motherDominant motherRecessive))]
