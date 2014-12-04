@@ -192,6 +192,7 @@ und verringert werden.
       ; Durch die Struktur von child, können hier jetzt nacheinander die einzelnen
       ; Eigenschaften ausgelesen werden.
       (display (show-butterfly (car child) (cadr child) (caddr child) (cadddr child) ))
+      ;((display (apply show-butterfly child))
     )
 )
 
