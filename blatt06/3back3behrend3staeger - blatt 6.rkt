@@ -141,7 +141,7 @@ Termen verknüpft werden muß, heißen endrekursiv.
           )
       ( if (zero? n)
            star
-           ( underlay
+           ( underlay ; Sterne übereinander legen
              star
              ( stars (sub1 n) )
              )
@@ -162,16 +162,26 @@ Termen verknüpft werden muß, heißen endrekursiv.
               [ new-size ( * fak init-size ) ]
               )
          ( if ( < fak  0.1 )
-              ( triangle new-size "solid" "darkgreen" )
+              ( triangle new-size "solid" "darkgreen" ) ; Oberste Baumspitze
+              
+              ; Unteranderlegen von...
               ( underlay/align/offset
                 "center"
                 "middle"
-                ( triangle new-size "solid" "darkgreen" )
+                ( triangle new-size "solid" "black" ) ; ... dem dünnem schwarzem Rahmen ...
                 0
-                (* new-size -0.4)
-                ( helper init-size (add1 step) )
+                (* new-size -0.2)
+              
+                ( underlay/align/offset
+                  "center"
+                  "middle"
+                  ( triangle new-size "solid" "darkgreen" ) ; ... und dem Baumelementstück ...
+                  0
+                  (* new-size -0.4)
+                  ( helper init-size (add1 step) ) ; ... und der nächsten Stücke
+                  )
                 )
-              )
+          )
          )
       )
    ( helper (+ (random 50) 50) 0 )
@@ -189,7 +199,7 @@ Termen verknüpft werden muß, heißen endrekursiv.
           )
       ( if (zero? n)
            tree
-           ( underlay
+           ( underlay ; Bäume übereinander legen
              tree
              ( trees (sub1 n) )
              )
@@ -203,6 +213,56 @@ Termen verknüpft werden muß, heißen endrekursiv.
    )
 
 
+; Generiert einen Pythagoras Baum mit 5 Stufen
+(define (one-pythagoras-tree)
+  ( define ( helper size step )
+      ( let* (
+              [rect ( square size "solid" "yellowgreen" )]
+              [rect-new-size (/ (sqrt (* 2 (expt size 2)))2) ] ; Mathematik für die neue Seitenlänge a^2 = b^2 + c^2
+              )
+         (if (>= step 4) ; not more than four. Otherwise will the above/align function break and the tree doesnt look good
+             rect
+             ( above/align
+                "center"
+                (beside
+                 (rotate 045 ( helper rect-new-size (add1 step) ))
+                 (rotate 315 ( helper rect-new-size (add1 step) ))
+                )
+                rect
+             ) 
+          )
+         )
+      )
+   ( helper 20 0 )
+)
+
+; Generiert auf dem orientation-canvas n Pythagorasbäume an zufälligen Positionen und gibt ein
+; Image zurück, auf dem die Pythagorasbäume (übereinander) liegen.
+( define (pythagoras-trees n)
+   ( let (
+          [ pythagoras-tree ( place-image
+                   (one-pythagoras-tree)
+                   (random scene-width)
+                   (+ (random (inexact->exact (* scene-height 0.30))) (inexact->exact (* scene-height 0.60)))
+                   orientation-canvas ) ]
+          )
+      ( if (zero? n)
+           pythagoras-tree
+           ( underlay ; Pythagorasbäume übereinander legen
+             pythagoras-tree
+             ( pythagoras-trees (sub1 n) )
+             )
+           )
+      )
+   )
+
+; Generiert das Pythagorasbäume-Image
+( define ground-full-of-pythagoras-trees
+   ( pythagoras-trees 2 )
+)
+
+
+
 
 ; Zeigt das Bild
 ( define ( create-scene )
@@ -210,6 +270,7 @@ Termen verknüpft werden muß, heißen endrekursiv.
      my-scene
      sky-full-of-stars
      snow-landscape
+     ground-full-of-pythagoras-trees
      ground-full-of-trees
      )
    )
