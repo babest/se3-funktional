@@ -1,8 +1,5 @@
 #lang racket
 
-;;; TODO: Erklärung Aufgabe 1!!!
-;;; TODO: Baumrekursion (nein, nicht mehrere Bäume zeichnen :))!!!
-
 #|
   SE3 Funktionale Programmierung
   WiSe 2014, Uni Hamburg
@@ -27,41 +24,47 @@
 
 #|
 
-Eine Funktionsdefinition, die sich auf der rechten Seite der definierenden Gleichung
-in jeder Fallunterscheidung selbst nur einmal verwendet, heißt linear-rekursiv.
-
-Eine rekursive Definition ist baumartig wenn in der Definition in einer
-Fallunterscheidung mehrfach auf die Definition Bezug genommen wird.
-
-Eine Rekursion ist geschachtelt, wenn die Funktion in der rekursiven Verwendung
-selbst als Argument mitgegeben wird.
-
-Eine rekursive Definiton heißt indirekt oder verschränkt, wenn zwei oder mehrere
-Definitionen sich wechselseitig rekursiv verwenden.
-
-Rekursive Funktionen, bei denen das Ergebnis der Rekursion nicht mehr mit anderen
-Termen verknüpft werden muß, heißen endrekursiv.
-
-
 # kopfstueck
-- lineare Rekursion
-- direkte Rekursion
+- lineare Rekursion, da kopfstück sich immer maximal nur ein mal aufruft
+- direkte Rekursion, da keine weitere Funktion verwendet wird, die sich wechselseitig aufrufen
+
 
 # endstueck
-- lineare Rekursion
-- direkte Rekursion
-- End-Rekursion
+- lineare Rekursion, da endstück sich immer maximal nur ein mal aufruft
+- direkte Rekursion, da keine weitere Funktion verwendet wird, die sich wechselseitig aufrufen
+- End-Rekursion, da das Ergebnis nicht mit anderen Termen verknüpft wird
 
 # merge
-- lineare Rekursion
-- direkte Rekursion
+- lineare Rekursion, da merge sich immer maximal nur ein mal aufruft
+- direkte Rekursion, da keine weitere Funktion verwendet wird, die sich wechselseitig aufrufen
 
 # merge-sort
-- Baumrekursion
-- direkte Rekursion
+- Baumrekursion, da sich die Funktion immer zweimal selber aufruft
+- direkte Rekursion, es werden zwar andere Funktionen verwendet, diese Funktionen rufen aber nicht
+  wieder merge-sort auf, somit ist keine Wechselseitigkeit vorhanden
 
 
-# mögliche antworten
+# Hilfe
+
+## Definitionen 
+
+Linear-Rekursiv: Eine Funktionsdefinition, die sich auf der rechten Seite der
+definierenden Gleichung in jeder Fallunterscheidung selbst nur einmal verwendet.
+
+Baumrekursiv: Eine rekursive Definition ist baumartig wenn in der Definition in
+einer Fallunterscheidung mehrfach auf die Definition Bezug genommen wird.
+
+Geschachtelt: Eine Rekursion ist geschachtelt, wenn die Funktion in der rekursiven
+Verwendung selbst als Argument mitgegeben wird.
+
+Indirekt: Eine rekursive Definiton heißt indirekt oder verschränkt, wenn zwei oder
+mehrere Definitionen sich wechselseitig rekursiv verwenden.
+
+Endrekursiv: Rekursive Funktionen, bei denen das Ergebnis der Rekursion nicht mehr
+mit anderen Termen verknüpft werden muß.
+
+## Die möglichen Antworten warne
+
 - lineare Rekursion
 - Baumrekursion
 - geschachtelte Rekursion
@@ -79,22 +82,6 @@ Termen verknüpft werden muß, heißen endrekursiv.
 
 (require 2htdp/universe)
 (require 2htdp/image)
-
-; Der Baum vom Übungsblatt
-( define baum1
-   ( above/align
-     "center"
-     ; der Stern an der Spitze
-     ( star-polygon 40 5 2 "solid" "gold" )
-     ; die Zweige
-     ( ellipse 20 40 "solid" "darkgreen" )
-     ( ellipse 80 50 "solid" "darkolivegreen" )
-     ( ellipse 130 60 "solid" "olivedrab" )
-     ( ellipse 180 80 "solid" "darkgreen" )
-     ; der Stamm
-     ( rectangle 40 60 "solid" "brown" )
-     )
-   )
 
 ; Größe des Bildes
 ( define scene-width 800 )
@@ -158,9 +145,12 @@ Termen verknüpft werden muß, heißen endrekursiv.
 ( define ( onetree )
    ( define ( helper init-size step )
       ( let* (
+              ; Verwendung einer Exponentialfunktion, damit
+              ; die Elemente immer kleiner werden
               [ fak ( expt (/ 2 3) step ) ]
               [ new-size ( * fak init-size ) ]
               )
+         ; Bevor die Elemente zu klein werden, abbbrechen
          ( if ( < fak  0.1 )
               ( triangle new-size "solid" "darkgreen" ) ; Oberste Baumspitze
               
@@ -178,7 +168,7 @@ Termen verknüpft werden muß, heißen endrekursiv.
                   ( triangle new-size "solid" "darkgreen" ) ; ... und dem Baumelementstück ...
                   0
                   (* new-size -0.4)
-                  ( helper init-size (add1 step) ) ; ... und der nächsten Stücke
+                  ( helper init-size (add1 step) ) ; ... und dem nächsten Stück
                   )
                 )
           )
@@ -209,7 +199,7 @@ Termen verknüpft werden muß, heißen endrekursiv.
 
 ; Generiert 10 Bäume
 ( define ground-full-of-trees
-   ( trees 10 )
+   ( trees 8 )
    )
 
 
@@ -258,7 +248,7 @@ Termen verknüpft werden muß, heißen endrekursiv.
 
 ; Generiert das Pythagorasbäume-Image
 ( define ground-full-of-pythagoras-trees
-   ( pythagoras-trees 2 )
+   ( pythagoras-trees 3 )
 )
 
 
@@ -275,5 +265,6 @@ Termen verknüpft werden muß, heißen endrekursiv.
      )
    )
 
+; Testaufruf
 (create-scene)
 
