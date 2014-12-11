@@ -45,6 +45,8 @@
 - direkte Rekursion, es werden zwar andere Funktionen verwendet, diese Funktionen rufen aber nicht
   wieder merge-sort auf, somit ist keine Wechselseitigkeit vorhanden
 
+ENTWEDER Baumrekursion ODER geschachtelte Rekursion ODER lineare Rekursion
+
 
 # Hilfe
 
