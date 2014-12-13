@@ -19,18 +19,26 @@
 
 
 ; ##############################################################################
+; ## Imports ###################################################################
+; ##############################################################################
+
+(require 2htdp/image);
+
+
+
+; ##############################################################################
 ; ## Hilfsfunktionen ###########################################################
 ; ##############################################################################
 
 ; Berechnet die Differenz einer Range, bzw eines Werte-Paars.
 ; Dabei wird das erste Element vom zweiten abgezogen.
 (define (diff range)
-  ( - (cdr range) (car range))
+  ( - (cdr range) (car range) )
   )
 
 ; Gibt das letzte Element einer Liste zurück
 (define (last-element list)
-  ( car (reverse list))
+  ( car (reverse list) )
   )
 
 
@@ -54,7 +62,7 @@
   )
 
 ; Beispielaufruf
-( range1 '(10 . 20) 5 )
+;( range1 '(10 . 20) 5 )
 
 ; Range endrekursiv
 (define (range2 interval n)
@@ -74,7 +82,7 @@
   )
 
 ; Beispielaufruf
-( range2 '(10 . 20) 5 )
+;( range2 '(10 . 20) 5 )
 
 ; Range mit FHOs
 (define (range3 interval n)
@@ -87,7 +95,7 @@
   )
 
 ; Beispielaufruf
-( range3 '(10 . 20) 5 )
+;( range3 '(10 . 20) 5 )
 
 
 
@@ -101,7 +109,7 @@
   )
 
 ; Beispielaufruf
-(function->points sqr '(0 . 10) 5)
+;( function->points sqr '(0 . 10) 5 )
 
 
 
@@ -132,7 +140,7 @@
   )
 
 ; Beispielaufruf
-(rescale1d '(0 2 4 6 8) '(10 . 50))
+;( rescale1d '(0 2 4 6 8) '(10 . 50) )
 
 
 ; Scaliert eine Menge von zweier-Tupeln auf zwei neue Intervalle
@@ -147,12 +155,39 @@
   )
 
 ; Beispielaufruf
-(rescale2d '( ( 0 . 0) (2 . 4) (4 . 16) (6 . 36) (8 . 64) ) '(10 . 50) '(5 . 25) )
+;( rescale2d '( ( 0 . 0) (2 . 4) (4 . 16) (6 . 36) (8 . 64) ) '(10 . 50) '(5 . 25) )
 
 
 
 ; ##############################################################################
 ; ## Aufgabe 2.3 ###############################################################
 ; ##############################################################################
+
+; Größe des Bildes
+( define scene-width 800 )
+( define scene-height 600 )
+
+; Dieses Rechteck ist auf dem Bild am Ende nicht sichtbar, wird jedoch verwendet
+; um die einzelnen Objekte auf dem Bild zu platzieren.
+( define orientation-canvas ( rectangle scene-width scene-height "solid" ( color 0 0 0 0 ) ) )
+
+
+(define (draw-points pointlist)
+  (let*
+      ( [ point (place-image (circle 1 "solid" "blue") (caar pointlist) (- scene-height (cdar pointlist)) orientation-canvas) ] )
+    ( cond 
+       [ (empty? pointlist) ]
+       [ (= (length pointlist) 1) point ]
+       [ else ( underlay
+                point
+                ( draw-points (cdr pointlist) )
+                ) ]
+       )
+    )
+  )
+
+; Beispielaufruf
+;(draw-points (function->points sqr '(0 . 50) 200))
+;(draw-points (function->points (curry * 0.5) '(0 . 800) 300))
 
 
