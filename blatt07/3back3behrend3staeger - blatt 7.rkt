@@ -22,9 +22,9 @@
 ; ## Imports ###################################################################
 ; ##############################################################################
 
-(require 2htdp/image);
+(require 2htdp/image) ; Image
 
-
+(require 2htdp/universe) ; Animate
 
 ; ##############################################################################
 ; ## Hilfsfunktionen ###########################################################
@@ -198,22 +198,108 @@
 
 
 ; ##############################################################################
+; ## Aufgabe 2.6 # Zusatzaufgabe ###############################################
+; ##############################################################################
+
+; Erstellt ein Bild mit Linien, die den Verlauf der Punkte zeigt.
+; Dafür muss pointlist aus mindestens 2 Punkten bestehen
+(define (draw-lines pointlist)
+  (let*
+      ; Die berechnen mit seiner Position
+      ( [ line (place-image 
+                (line 
+                 (- (caar pointlist) (caadr pointlist)) ; Linien x-Richtung/Vektor
+                 (- (cdadr pointlist) (cdar pointlist)) ; Linien y-Richtung/Vektor
+                 "blue"
+                 ) 
+                (caar pointlist) 
+                (- scene-height (cdar pointlist)) 
+                orientation-canvas) 
+               ] 
+        )
+    ( cond
+       ; Wenn noch weitere (>= 2) Punkte vorhanden sind, dann die weiteren Linien auch malen
+       [ (= (length pointlist) 2) line ]
+       [ else ( underlay
+                line
+                ( draw-lines (cdr pointlist) )
+                ) ]
+       )
+    )
+  )
+
+; Beispielaufruf
+;( draw-lines (function->points sqr '(0 . 50) 200) )
+;( draw-lines (function->points (curry * 0.5) '(0 . 800) 300) )
+
+
+
+; ##############################################################################
 ; ## Aufgabe 2.4 ###############################################################
 ; ##############################################################################
 
-(define (plot-function func interval n)
-  ( draw-points
-    ( rescale2d
-      ( function->points func interval n )
-      ( cons 0 scene-width)
-      ( cons 0 scene-height)
+; Zeichnet auf einen Graph n-Viele Punkte im Interval interval erzeugt durch die Funktion func
+(define (plot-function func interval n lines-instead-points?)
+  (let*
+      (
+       ; Errechnet alle Punkte (genau wie plot-function )
+       [allPoints ( rescale2d
+                    ( function->points func interval n )
+                    ( cons 0 scene-width)
+                    ( cons 0 scene-height)
+                    )]
+       )
+    ; Unterscheiden nach Punkt- oder Liniendarstellung
+    (if lines-instead-points?
+        ( draw-lines allPoints)
+        ( draw-points allPoints)
+        )
+    )
+  )
+
+; Beispielaufruf
+;( plot-function sin (cons 0 (* 2 pi)) 200 #f)
+;( plot-function cos (cons 0 (* 2 pi)) 200 #t)
+;( plot-function tan '(-1.5 . 1.5) 200 #f)
+;( plot-function sqr '(-10 . 10) 200 #t)
+;( plot-function sqrt '(0 . 10) 200 #t)
+
+
+; ##############################################################################
+; ## Aufgabe 2.4 ###############################################################
+; ##############################################################################
+
+; Zeichnet auf einen Graph n-Viele Punkte im Interval interval erzeugt durch die Funktion func
+; Als letzter Parameter wird der Schritt t bzw. der wievielte Punkt markiert werden soll.
+(define (live-plot-function func interval n lines-instead-points? t)
+  (let*
+      (
+       ; Errechnet alle Punkte (genau wie plot-function )
+       [allPoints ( rescale2d
+                    ( function->points func interval n )
+                    ( cons 0 scene-width)
+                    ( cons 0 scene-height)
+                    )]
+       ; Die genaue Nummer des Punkts der hervorgehoben werden soll
+       [marker-index (modulo t n)]
+       ; Die Koordinaten des Markerpunkts
+       [marker (list-ref allPoints marker-index)]
+       )
+    ; Den Plot zeichnen
+    ( underlay
+      ; Den Markler zeichnen
+      (place-image (ellipse 8 8 "outline" "red") (car marker) (- scene-height (cdr marker)) orientation-canvas)
+      
+      ; Den Graphen zeichen (genau wie plot-function )
+      ; Unterscheiden nach Punkt- oder Liniendarstellung
+      (if lines-instead-points?
+          (draw-lines allPoints)
+          (draw-points allPoints)
+          )
       )
     )
   )
 
 ; Beispielaufruf
-;( plot-function sin (cons 0 (* 2 pi)) 200)
-;( plot-function cos (cons 0 (* 2 pi)) 200)
-;( plot-function tan '(-1.5 . 1.5) 200)
-;( plot-function sqr '(-10 . 10) 200)
-;( plot-function sqrt '(0 . 10) 200)
+;(animate (curry live-plot-function sin (cons 0 (* 2 pi)) 200 #t))
+;(animate (curry live-plot-function cos (cons 0 (* 4 pi)) 200 #f))
