@@ -23,7 +23,7 @@
 ; ##############################################################################
 #|
 - Aufgabe 1.3 überprüfen
-- Aufgabe 2 Zusatzaufgabe
+- Aufgabe 3 SET
 |#
 
 
@@ -133,3 +133,13 @@ Diese Funktion wird mit map auf jedes Element der Liste angewendet. Also jede Za
 
 ;(summegrosserzaheln xs)
 
+; Teilt eine Liste in zwei Teilliste mit nur geraden und ungeraden Elementen.
+(define (splitEvenOdd numList)
+  (partition even? numList)
+  )
+;(splitEvenOdd numbers)
+
+
+; ##############################################################################
+; ## Aufgabe 3 #################################################################
+; ##############################################################################
