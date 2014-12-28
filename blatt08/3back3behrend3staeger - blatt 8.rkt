@@ -23,6 +23,7 @@
 ; ##############################################################################
 #|
 - Aufgabe 1.3 überprüfen
+- Aufgabe 2 Zusatzaufgabe
 |#
 
 
@@ -102,3 +103,33 @@ Diese Funktion wird mit map auf jedes Element der Liste angewendet. Also jede Za
 1.8 multiplizieren und zu dem Ergebnis 33 addieren.
 
 |#
+
+
+
+; ##############################################################################
+; ## Aufgabe 2 #################################################################
+; ##############################################################################
+
+( define xs '(1 2 -3 4 5 12) )
+
+; Gibt eine Liste mit Beträgen zurück
+( define (betraege list)
+   ( map abs list)
+   )
+
+;(betraege xs)
+
+; Gibt eine Liste aller Elemente zurück, die glatt durch drei teilbar sind
+( define (durchdreiteilbar list)
+   ( filter ( compose zero? ( curryr remainder 3)) list )
+   )
+
+;(durchdreiteilbar xs)
+
+; Gibt die Summe aller Elemente zurück, die größer als 10 sind
+( define (summegrosserzaheln list)
+   ( foldl + 0 ( filter ( curry < 10 ) list ) )
+   )
+
+;(summegrosserzaheln xs)
+
