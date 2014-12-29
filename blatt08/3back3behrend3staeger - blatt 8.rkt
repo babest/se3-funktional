@@ -24,6 +24,7 @@
 #|
 - Aufgabe 1.3 überprüfen
 - Aufgabe 3 SET
+- Aufgabe 3.2: geht das Erzeugen des Decks auch cooler?
 |#
 
 
