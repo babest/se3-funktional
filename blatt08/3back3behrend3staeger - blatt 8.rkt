@@ -137,9 +137,65 @@ Diese Funktion wird mit map auf jedes Element der Liste angewendet. Also jede Za
 (define (splitEvenOdd numList)
   (partition even? numList)
   )
-;(splitEvenOdd numbers)
+
+;(splitEvenOdd xs)
+
 
 
 ; ##############################################################################
-; ## Aufgabe 3 #################################################################
+; ## Aufgabe 3.1 ###############################################################
 ; ##############################################################################
+
+#|
+Die Repräsentation der möglichen Eigenschaften einer Karte implementieren wir
+als vier verscheidene Listen, die jeweils alle möglichen Ausprägung einer
+Eigenschaft enthalten.
+|#
+( define counts '(1 2 3) )
+( define patterns '(waves oval rectangle) )
+( define modes '(outline solid hatched) )
+( define colors '(red green blue) )
+
+#|
+Eine einzelne Karte implementieren wir ebenfalls als eine List, die ihre Eigen-
+schaften in folgender Reihenfolge enthält: Anzahl, Form, Füllmuster, Farbe.
+|#
+( define sample-card '(2 waves hatched green) )
+
+
+
+; ##############################################################################
+; ## Aufgabe 3.2 ###############################################################
+; ##############################################################################
+
+(require "setkarten-module.rkt")
+
+; Hilfsfunktion
+; Zeigt eine Set-Karte an mit der angegbeben Funktion
+( define ( show-card card )
+   ( apply show-set-card card )
+   )
+
+; Erzeugt ein Deck mit 81 Set Karten, bei dem eine Karte jeder möglichen
+; Kombination vorhanden ist
+( define ( create-deck )
+   (for*/list ( [i counts]
+                [j patterns]
+                [k modes]
+                [l colors]
+                )
+     (append (list i j k l))
+     )
+   )
+
+; Gibt eine Liste von Karten aus
+( define ( visualize-cards cards )
+   ( map show-card cards )
+   )
+
+
+
+; ##############################################################################
+; ## Aufgabe 3.3 ###############################################################
+; ##############################################################################
+
