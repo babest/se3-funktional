@@ -23,8 +23,13 @@
 ; ##############################################################################
 #|
 - Aufgabe 1.3 überprüfen
-- Aufgabe 3 SET
+  -> 3back:
+   Es muss noch auf dem Wert 5 eingegangen werden.
 - Aufgabe 3.2: geht das Erzeugen des Decks auch cooler?
+  -> 3back:
+   JEIN. Aktuell es ist schön kurz und verständlich.
+   Würde auch mit FHO funktionieren, aber dann deutlich aufwendiger und schwerer zu erkennen.
+   -> Somit würde ich bei dem aktuellen bleiben.
 |#
 
 
@@ -161,7 +166,16 @@ Eigenschaft enthalten.
 Eine einzelne Karte implementieren wir ebenfalls als eine List, die ihre Eigen-
 schaften in folgender Reihenfolge enthält: Anzahl, Form, Füllmuster, Farbe.
 |#
-( define sample-card '(2 waves hatched green) )
+( define sample-card1 '(3 waves hatched green) )
+( define sample-card2 '(2 waves solid red))
+( define sample-card3 '(1 waves outline blue))
+
+#|
+Zur Überprüpfung definieren wir uns noch ein paar Sets
+|#
+( define set (list sample-card1 sample-card2 sample-card3) )  ; All different
+( define set2 (list sample-card1 sample-card1 sample-card1) ) ; All the same
+( define no-set (list sample-card1 sample-card2 sample-card1) ) ; We have duplicates (no set)
 
 
 
@@ -200,3 +214,74 @@ schaften in folgender Reihenfolge enthält: Anzahl, Form, Füllmuster, Farbe.
 ; ## Aufgabe 3.3 ###############################################################
 ; ##############################################################################
 
+; Hilfsfunktion
+; Überprüft ob eine Liste nur die gleichen (equal?) Elemente beinhaltet
+( define (all-the-same? list)
+   ; Sind genug Daten (Paare) vorhanden, um vergleichen zu können?
+  (if
+   (and (pair? list) (pair? (cdr list)))
+   ; Ist das vordereste und das nächste Element identisch?
+    (if
+     (equal? (car list) (cadr list))
+     (all-the-same? (cdr list)) ; Rekursiv durch die Liste arbeiten
+     #f ; Nein? Dann sind nicht alle Elemente identisch
+     )
+    
+    #t
+   )
+)
+
+; Hilfsfunktion
+; Überprüpft ob eine Liste nur unterschiedliche Elemente beinhaltet
+( define (all-different? list)
+   ; Ist dies eine List?
+   (if
+    (pair? list)
+    
+    ; Kann ich das vordereste Element in der Liste finden (member?) ?
+    (if
+     (member (car list) (cdr list))
+     #f
+     (all-different? (cdr list)) ; Rekursiv durch die Liste arbeiten
+     )
+    
+     #t
+    )
+   )
+
+
+; Überprüpft ob die übergebenen Karten ein Set sind
+( define ( is-a-set? cards )
+   ; Sind es wirklich 3 Karten?
+   (if
+    (= 3 (length cards))
+   
+    ; Sind da noch genug Eigenschaften.
+    ; Bei leerer Liste (durch rekursiven Vorgang) muss dies ein Set sein
+    (if 
+     (> 1 (length (car cards)))
+     #t
+     
+     ; Sonst muss gelten, dass die aktuellen Eigenschaften alle
+     ; identisch ODER unterschiedlich sein müssen
+     ; UND die restlichen Eigenschaften auch ein Set bilden.
+     (and      
+       (or
+         (all-the-same?  (map car cards))
+         (all-different? (map car cards))
+        )
+        (is-a-set? (map cdr cards))
+      )
+     
+     ; Sind da noch genug Eigenschaften. (REST)
+     )
+    
+   ; Sind es wirklich 3 Karten? (REST)
+    #f
+   )
+)
+   
+
+;(is-a-set? set)
+;(is-a-set? set2)
+;(is-a-set? no-set)
