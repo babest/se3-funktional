@@ -292,12 +292,11 @@ Im Kontext unserer Aufgabe kann das System der Ergänzungsmehtode bei der cite-
 Methode verwendet werden. Hier kann durch eine Methode der Oberklasse eine
 Standard-Ausgabe generiert werden mit den gemeinsamen Feldern und diese dann
 von den Unterklassen vorher oder nachher ergänzt werden. Eine Umstrukturierung
-ist hier nicht notwendig ;)
+könnte wie folgt aussehen:
 
-Vielleicht bietet es sich jedoch an eine Frage zu stellen: Gibt es in Swindle
-nicht die Möglichkeit, Daten zwischen den Ergänzungsmethoden hin und her zu
-geben? In unserem Fall haben wir das jetzt mit einer Exemplarvariablen gelöst,
-was vielleicht nicht unbedingt schick ist...
+Die cite-Methoden der Unterklassen mit dem :after Schlüsselwort erweitern.
+In allen cite-Methoden keinen String zurückgeben, sondern direkt auf der
+Konsole ausgeben.
 
 |#
 
