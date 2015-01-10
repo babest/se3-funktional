@@ -1,4 +1,4 @@
-;#lang swindle
+#lang swindle
 
 #|
   SE3 Funktionale Programmierung
@@ -44,7 +44,7 @@
    ( year ; Erscheinungsjahr
      :reader get-year
      :initarg :year
-     :initvalie 0
+     :initvalue 0
      :type <number>
      :documentation "The year of publication"
      )
@@ -266,9 +266,9 @@
 
 ; Beispielaufrufe
 
-;( cite abook )
-;( cite amiscellany )
-;( cite apaper )
+;(displayln ( cite abook ) )
+;(displayln ( cite amiscellany ) )
+;(displayln ( cite apaper ) )
 
 
 
@@ -301,3 +301,185 @@ Konsole ausgeben.
 |#
 
 
+
+; ##############################################################################
+; ## Aufgabe 2.1 + 2.2 #########################################################
+; ##############################################################################
+
+; Klasse für das grundsätzliche Fahrzeug
+( defclass fahrzeug ()
+   ( medium ; Medium
+     :reader get-medium
+     :initarg :medium
+     :initvalue ""
+     :type <string>
+     :documentation "The medium the vehicle is moving in"
+     )
+   ( maxspeed ; Maximalgeschwindigkeit
+     :reader get-maxspeed
+     :initarg :maxspeed
+     :initvalue 0
+     :type <number>
+     :documentation "The maximal speed of the vehicle"
+     )
+   ( capacity ; Zuladung
+     :reader get-capacity
+     :initarg :capacity
+     :initvalue 0
+     :type <number>
+     :documentation "The capacity of the vehicle"
+     )
+   ( consumption ; Verbrauch
+     :reader get-consumption
+     :initarg :consumption
+     :initvalue 0
+     :type <number>
+     :documentation "The consumption of the vehicle"
+     )
+   ( maxPassengers ; Passagierzahl
+     :reader get-maxPassengers
+     :initarg :maxPassengers
+     :initvalue 0
+     :type <number>
+     :documentation "The maximum about of the vehicle"
+     )
+   :printer #t
+   )
+
+; Erbende Klassen
+( defclass landFahrzeug (fahrzeug)
+   ( medium :initvalue "land")
+   :printer #t
+   )
+( defclass landFahrzeugStrasse (landFahrzeug)
+   ( medium :initvalue "landStrasse")
+   :printer #t
+   )
+( defclass landFahrzeugSchienen (landFahrzeug)
+   ( medium :initvalue "landSchiene")
+   :printer #t
+   )
+
+( defclass wasserFahrzeug (fahrzeug)
+   ( medium :initvalue "wasser")
+   :printer #t
+   )
+( defclass luftFahrzeug (fahrzeug)
+   ( medium :initvalue "luft")
+   :printer #t
+   )
+
+( defclass amphibienFahrzeug (landFahrzeug wasserFahrzeug)
+   :printer #t
+   )
+( defclass amphibienFlugzeug (luftFahrzeug landFahrzeugStrasse wasserFahrzeug)
+   :printer #t
+   )
+
+( defclass zweiWegeFahrzeug (landFahrzeugStrasse landFahrzeugSchienen)
+   :printer #t
+   )
+( defclass backIntoTheFutureCar (landFahrzeugSchienen luftFahrzeug)
+   :printer #t
+   )
+
+; Generische Methoden
+( defgeneric read-medium ((f fahrzeug)) :combination generic-append-combination )
+( defgeneric read-maxspeed ((f fahrzeug)) :combination generic-min-combination )
+( defgeneric read-capacity ((f fahrzeug)) :combination generic-min-combination )
+( defgeneric read-consumption ((f fahrzeug)) :combination generic-max-combination )
+( defgeneric read-maxPassengers ((f fahrzeug)) :combination generic-min-combination )
+
+#|
+Für die Methodekombination bieten sich verschiedene Möglichkeiten an.
+
+Bei dem Medium müssen alle Medien ausgelistet sein; es darf keine überschrieben werden.
+
+Für die meisten Eigenschaften muss entweder von einer Mindest- oder Maximalangabe
+ausgegangen werden. Wir haben uns für eine Mindestangabe entschieden, bzw. Angaben
+die die Fahrzeuge auf jeden Fall erfüllen, vielleicht auch mehr...
+So ist ein Fahrzeug (hoffentlich) mindestens so schnell (maxspeed), wie das langsamste
+der 'Abstammungsfahrzeuge', gleiches gilt für die Zuladung und auch die Anzahl der Passagiere.
+Bei dem Verbrauch muss hingegen vom maximalen Verbrauch ausgegangen werden, da dieser bei
+einseitiger Benutzung des Fahrzeug erreicht werden kann und somit die Reichweite einschränkt.
+|#
+
+; ##############################################################################
+; ## Aufgabe 2.3 ###############################################################
+; ##############################################################################
+
+; Impementation EINER generische Methode
+; BEGIN NOT WORKING
+(defmethod read-medium ((lf landFahrzeug))
+  (list (get-medium lf)))
+(defmethod read-medium ((lfst landFahrzeugStrasse))
+  (list (get-medium lfst)))
+(defmethod read-medium ((lfsc landFahrzeugSchienen))
+  (list (get-medium lfsc)))
+(defmethod read-medium ((wf wasserFahrzeug))
+  (list (get-medium wf)))
+(defmethod read-medium ((lf luftFahrzeug))
+  (list (get-medium lf)))
+(defmethod read-medium ((af amphibienFahrzeug))
+  (list (get-medium af)))
+(defmethod read-medium ((btf amphibienFlugzeug))
+  (list (get-medium btf)))
+(defmethod read-medium ((zwf zweiWegeFahrzeug))
+  (list (get-medium zwf)))
+(defmethod read-medium ((bitfc backIntoTheFutureCar))
+  (list (get-medium bitfc)))
+; END NOT WORKING
+
+
+(defmethod read-maxspeed ((lf landFahrzeug))
+  (get-maxspeed lf))
+(defmethod read-maxspeed ((lfst landFahrzeugStrasse))
+  (get-maxspeed lfst))
+(defmethod read-maxspeed ((lfsc landFahrzeugSchienen))
+  (get-maxspeed lfsc))
+(defmethod read-maxspeed ((wf wasserFahrzeug))
+  (get-maxspeed wf))
+(defmethod read-maxspeed ((lf luftFahrzeug))
+  (get-maxspeed lf))
+(defmethod read-maxspeed ((af amphibienFahrzeug))
+  (get-maxspeed af))
+(defmethod read-maxspeed ((btf amphibienFlugzeug))
+  (get-maxspeed btf))
+(defmethod read-maxspeed ((zwf zweiWegeFahrzeug))
+  (get-maxspeed zwf))
+(defmethod read-maxspeed ((bitfc backIntoTheFutureCar))
+  (get-maxspeed bitfc))
+
+
+(define auto (make landFahrzeugStrasse :maxspeed 230 :capacity: 2000 :consumption 10 :maxPassengers 5))
+(define ship (make wasserFahrzeug :maxspeed 50 :capacity: 200000 :consumption 100 :maxPassengers 500))
+(define batMobil (make amphibienFlugzeug :maxspeed 300 :capacity: 1000 :consumption 0 :maxPassengers 2))
+(define docsCar (make backIntoTheFutureCar :maxspeed 100000 :capacity: 300 :consumption 30 :maxPassengers 5))
+
+; Beispielaufrufe
+; BEGIN NOT WORKING
+(displayln "Sollten alles verschiedene Werte sein:")
+(displayln (read-medium auto))
+(displayln (read-medium ship))
+(displayln (read-medium batMobil))
+(displayln (read-medium docsCar))
+; END NOT WORKING
+
+(displayln (read-maxspeed auto))
+(displayln (read-maxspeed ship))
+(displayln (read-maxspeed batMobil))
+(displayln (read-maxspeed docsCar))
+
+#|
+
+In CLOS existiert zu jeder Klasse eine Klassenpräzedenzsliste. Dadurch wird die
+Objektorientierung ermöglicht. Es ist wichtig, die Klassen von denen geerbit wird
+in der richtige Reihenfolge zu definieren, ansonst gibt es einen Fehler, da CLOS
+dann die Vererbungsstruktur nicht richtig aufbauen kann. Durch diese Vererbungs-
+struktur wird dann auch die Reihenfolge der Abarbeitung der Methoden festgelegt.
+Zuerst wird die Methode der Klasse mit der höchsten Präzendenz ausgeführt und dann
+falls eine combination-Regel existiert, auch die anderen tieferliegenden Klassen
+berücksichtigt.
+
+
+|#
