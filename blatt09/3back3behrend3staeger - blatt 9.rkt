@@ -409,28 +409,6 @@ einseitiger Benutzung des Fahrzeug erreicht werden kann und somit die Reichweite
 ; ##############################################################################
 
 ; Impementation EINER generische Methode
-; BEGIN NOT WORKING
-(defmethod read-medium ((lf landFahrzeug))
-  (list (get-medium lf)))
-(defmethod read-medium ((lfst landFahrzeugStrasse))
-  (list (get-medium lfst)))
-(defmethod read-medium ((lfsc landFahrzeugSchienen))
-  (list (get-medium lfsc)))
-(defmethod read-medium ((wf wasserFahrzeug))
-  (list (get-medium wf)))
-(defmethod read-medium ((lf luftFahrzeug))
-  (list (get-medium lf)))
-(defmethod read-medium ((af amphibienFahrzeug))
-  (list (get-medium af)))
-(defmethod read-medium ((btf amphibienFlugzeug))
-  (list (get-medium btf)))
-(defmethod read-medium ((zwf zweiWegeFahrzeug))
-  (list (get-medium zwf)))
-(defmethod read-medium ((bitfc backIntoTheFutureCar))
-  (list (get-medium bitfc)))
-; END NOT WORKING
-
-
 (defmethod read-maxspeed ((lf landFahrzeug))
   (get-maxspeed lf))
 (defmethod read-maxspeed ((lfst landFahrzeugStrasse))
@@ -457,14 +435,6 @@ einseitiger Benutzung des Fahrzeug erreicht werden kann und somit die Reichweite
 (define docsCar (make backIntoTheFutureCar :maxspeed 100000 :capacity: 300 :consumption 30 :maxPassengers 5))
 
 ; Beispielaufrufe
-; BEGIN NOT WORKING
-(displayln "Sollten alles verschiedene Werte sein:")
-(displayln (read-medium auto))
-(displayln (read-medium ship))
-(displayln (read-medium batMobil))
-(displayln (read-medium docsCar))
-; END NOT WORKING
-
 (displayln (read-maxspeed auto))
 (displayln (read-maxspeed ship))
 (displayln (read-maxspeed batMobil))
@@ -480,6 +450,5 @@ struktur wird dann auch die Reihenfolge der Abarbeitung der Methoden festgelegt.
 Zuerst wird die Methode der Klasse mit der höchsten Präzendenz ausgeführt und dann
 falls eine combination-Regel existiert, auch die anderen tieferliegenden Klassen
 berücksichtigt.
-
 
 |#
