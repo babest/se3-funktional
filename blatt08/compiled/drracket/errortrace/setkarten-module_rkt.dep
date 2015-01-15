@@ -1,0 +1,1 @@
+("6.1.1" ("f3ff48e3f9ff4c6dc8029a5368f49b997e456471" . "6ff641d7a5f288d10355580339860ec5af2a6fb0") (collects #"2htdp" #"image.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"wxme" #"read.rkt"))
