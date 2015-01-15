@@ -1,4 +1,4 @@
-#lang swindle
+#lang racket
 
 #|
   SE3 Funktionale Programmierung
@@ -17,4 +17,25 @@
 |#
 
 
+
+; ##############################################################################
+; ## Aufgabe 1.1 ###############################################################
+; ##############################################################################
+
+; Prüft ob jedes Element in der Liste xs das Präfikat p? erfüllt
+( define ( every p? xs )
+   ( andmap p? xs )
+   )
+
+; Beispielaufruf
+;(every (curry = 3) '(3 3 3))
+
+
+; Prüft, ob mindestens ein Element der Liste cs das Prädikat p? erfüllt
+( define ( some p? xs )
+   ( ormap p? xs )
+   )
+
+; Beispielaufruf
+;(some (curry = 3) '(1 3 9))
 
