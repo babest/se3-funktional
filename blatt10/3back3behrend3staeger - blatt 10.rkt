@@ -33,7 +33,14 @@
 
 ; Prüft, ob mindestens ein Element der Liste cs das Prädikat p? erfüllt
 ( define ( some p? xs )
-   ( ormap p? xs )
+   ( define ( helper list )
+      ( cond
+         [ ( empty? list ) #f ]
+         [ ( p? (car list) ) ( car list ) ]
+         [ else ( helper (cdr list) ) ]
+         )
+      )
+   ( helper xs )
    )
 
 ; Beispielaufruf
@@ -55,8 +62,10 @@
 ; Hilfsmethode
 ; Prüft, ob ein Element in einer Liste vorhanden ist und gibt #t oder #f zurück
 ( define ( contains? element list )
-   ( list?
-     ( member element list )
+   ( if
+     ( some (curry equal? element) list )
+     #t
+     #f
      )
    )
 
@@ -64,7 +73,7 @@
 ; Prüft, ob ein Element nicht einer Liste vorhanden ist und gibt #t oder #f zurück
 ( define ( notcontains? element list )
    ( not
-     ( member element list )
+     ( contains? element list )
      )
    )
 
