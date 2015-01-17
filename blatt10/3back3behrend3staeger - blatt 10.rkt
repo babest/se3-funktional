@@ -57,6 +57,10 @@
 ( define symmetrisch  '((1 . 3) (2 . 2) (3 . 1)) )
 ( define asymmetrisch '((1 . 2) (1 . 3) (2 . 3)) )
 ( define reflexiv '((1 . 1) (1 . 3) (3 . 3)) )
+( define transitive '((1 . 2) (2 . 3) (1 . 3)) )
+( define notTransitive '((1 . 2) (2 . 3) (1 . 3) (2 . 4)) )
+( define aequiR '((1 . 1) (3 . 3) (1 . 3) (3 . 1)) )
+( define ordnung asymmetrisch)
 
 
 ; Hilfsmethode
@@ -112,15 +116,79 @@
       )
    )
 
-; TODO fertig machen --------------------------------------------------------
+; Prüpft ob eine übergebene Relation transitiv ist
+( define ( transitiv? r )
+   (let
+       ([rNoReflexiv (filter ( λ (x) (not (= (car x) (cdr x)))) r)])
+     ; Überprüpft die Transitivität für einen Knoten
+     ( define ( edgeTester startNode )
+        ;(displayln startNode)
+        ;Überprüpft, die Transitivität zwischen Knoten (startKnoten und nextKnoten)
+        ( define ( edgePathTester nextNode )
+           ;(display "Teste start: ")
+           ;(display startNode)
+           ;(display ", next: ")
+           ;(displayln nextNode)
+           (if
+            ; Testet auf einen (Teil-)Zyklus (Zyklus -> transitiv)
+            (eqv? (cdr nextNode) (car startNode))
+            #t
+            (if
+             ; Existiert ein Pfad zwischem den (einzelnen) Startknoten und diesem Knoten?
+             (contains? (cons (car startNode) (cdr nextNode)) rNoReflexiv)
+             ; Überprüpft alle ausgehenden Pfade und prüpft einen Pfad
+             (every edgePathTester (filter ( λ (x) (= (car x) (cdr nextNode))) rNoReflexiv))
+             #f
+             )
+            )
+           )
+        ; Überprüpft ob ein Pfad zwischen den Startknoten und allen ausgehenden Knoten des Startknoten existiert
+        (every edgePathTester (filter ( λ (x) (= (car x) (cdr startNode))) rNoReflexiv))
+        )
+     ; Überprüpft die Transitivität für jeden Knoten
+     (every edgeTester rNoReflexiv)
+     )
+)
+
+; Überprüpft ob eine Relation eine Äquivalenzrelation ist
+; Eine Äquivalenzrelation hat folgende Eigenschaften: reflexiv, symmetrisch und transitiv
+( define (aequi? r)
+   (and
+    (reflexiv? r)
+    (symmetrisch? r)
+    (transitiv? r)
+    )
+   )
+
+; Überprüpft ob eine Relation eine strikte Ordnung ist
+; Eine Äquivalenzrelation hat folgende Eigenschaften: asymmetrisch und transitiv
+(define (ord? r)
+  (and
+   (asymmetrisch? r)
+   (transitiv? r)
+   )
+  )
 
 
-(symmetrisch? symmetrisch) ; -> #t
-(symmetrisch? asymmetrisch) ; -> #f
+;(symmetrisch? symmetrisch) ; -> #t
+;(symmetrisch? asymmetrisch) ; -> #f
 
-(asymmetrisch? asymmetrisch) ; -> #t
-(asymmetrisch? symmetrisch) ; -> #f
+;(asymmetrisch? asymmetrisch) ; -> #t
+;(asymmetrisch? symmetrisch) ; -> #f
 
-(reflexiv? reflexiv) ; -> #t
-(reflexiv? symmetrisch) ; -> #f
+;(reflexiv? reflexiv) ; -> #t
+;(reflexiv? symmetrisch) ; -> #f
 
+;(transitiv? transitive) ; -> #t
+;(transitiv? notTransitive) ; -> #f
+
+;(aequi? aequiR) ; -> #t
+;(aequi? notTransitive) ; -> #f
+
+;(ord? ordnung) ; -> #t
+;(ord? notTransitive) ; -> #f
+
+
+; ##############################################################################
+; ## Aufgabe 2.1 ###############################################################
+; ##############################################################################
