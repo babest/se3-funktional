@@ -191,7 +191,7 @@
 
 
 ; ##############################################################################
-; ## Aufgabe 2 #################################################################
+; ## Aufgabe 2.1 ###############################################################
 ; ##############################################################################
 
 (require unstable/list)
@@ -201,6 +201,11 @@
   (cartesian-product m1 m2)
   )
 ;(Kreuzprodukt '(1 2 3) '(a b c)) ; -> '((1 a) (1 b) (1 c) (2 a) (2 b) (2 c) (3 a) (3 b) (3 c))
+
+
+; ##############################################################################
+; ## Aufgabe 2.2 ###############################################################
+; ##############################################################################
 
 ; erzeugt ein (Kreuz-)Produkt aus mehreren Mengen
 (define (Produkt m)
@@ -214,6 +219,10 @@
 ; ####################### TODO ##############
 ; -> flatten the result.
 
+
+; ##############################################################################
+; ## Aufgabe 2.3 ###############################################################
+; ##############################################################################
 
 ; Hilfsfunktion
 ; Überprüft ob eine Liste nur die gleichen (equal?) Elemente beinhaltet
@@ -232,23 +241,29 @@
    )
 )
 
+; Gibt die Liste aller Kombinationen (Auswahl von cardinality verschiedenen Elementen aus einer Menge M) zurück
+; Die Reihenfolge bleibt unbeachtet
 (define (Kombination cardinality m)
   (let
+      ; Erstellt die entsprechend große Liste (m^cardinality)
       ([combiList (Produkt (make-list cardinality m))])
+    ; Hilfsfunktion. Übernimmt, dass das Ergebnis Reihenfolge unabhängig ist.
     (define (combiListIndependentOfOrder filterThisList)
       (if
        (empty? filterThisList)
        '()
       (let
+          ; Speichert rekursiv die Liste, die mit dem Listenrest schon reihenfolge unabhängig aufgebaut wurde.
           ([listSoFar (combiListIndependentOfOrder (cdr filterThisList))])
           (if
+           ; Überprüpft, ob das aktuelle (car filterThisList) Element schon in der combiListe vorhanden ist
             (or 
-             (member (car filterThisList) listSoFar)
-             (member (list (cadar filterThisList) (caar filterThisList)) listSoFar)
-             (eqv? (cadar filterThisList) (caar filterThisList))
+             (member (car filterThisList) listSoFar) ; direktes Duplikat
+             (member (reverse (car filterThisList)) listSoFar) ; Duplikat mit anderer Reihenfolge
+             (all-the-same? (car filterThisList)) ; Reflexives Element
              )
             listSoFar
-            (cons (car filterThisList) listSoFar)
+            (cons (car filterThisList) listSoFar) ; Falls nicht, dann aktuelles Element hinzufügen.
           )
       )
       )
