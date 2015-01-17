@@ -189,6 +189,76 @@
 ;(ord? notTransitive) ; -> #f
 
 
+
 ; ##############################################################################
-; ## Aufgabe 2.1 ###############################################################
+; ## Aufgabe 2 #################################################################
+; ##############################################################################
+
+(require unstable/list)
+
+; erzeugt das Kreuzprodukt (auch bekannt als Kartesisches Produkt)
+(define (Kreuzprodukt m1 m2)
+  (cartesian-product m1 m2)
+  )
+;(Kreuzprodukt '(1 2 3) '(a b c)) ; -> '((1 a) (1 b) (1 c) (2 a) (2 b) (2 c) (3 a) (3 b) (3 c))
+
+; erzeugt ein (Kreuz-)Produkt aus mehreren Mengen
+(define (Produkt m)
+  (if
+   (> 2 (length m))
+   (car m)
+   (Kreuzprodukt (car m) (Produkt (cdr m)))
+   )
+)
+;( Produkt '( (1 2) (a b) (X) )) ; -> '((1 (a X)) (1 (b X)) (2 (a X)) (2 (b X)))
+; ####################### TODO ##############
+; -> flatten the result.
+
+
+; Hilfsfunktion
+; Überprüft ob eine Liste nur die gleichen (equal?) Elemente beinhaltet
+( define (all-the-same? list)
+   ; Sind genug Daten (Paare) vorhanden, um vergleichen zu können?
+  (if
+   (and (pair? list) (pair? (cdr list)))
+   ; Ist das vordereste und das nächste Element identisch?
+    (if
+     (equal? (car list) (cadr list))
+     (all-the-same? (cdr list)) ; Rekursiv durch die Liste arbeiten
+     #f ; Nein? Dann sind nicht alle Elemente identisch
+     )
+    
+    #t
+   )
+)
+
+(define (Kombination cardinality m)
+  (let
+      ([combiList (Produkt (make-list cardinality m))])
+    (define (combiListIndependentOfOrder filterThisList)
+      (if
+       (empty? filterThisList)
+       '()
+      (let
+          ([listSoFar (combiListIndependentOfOrder (cdr filterThisList))])
+          (if
+            (or 
+             (member (car filterThisList) listSoFar)
+             (member (list (cadar filterThisList) (caar filterThisList)) listSoFar)
+             (eqv? (cadar filterThisList) (caar filterThisList))
+             )
+            listSoFar
+            (cons (car filterThisList) listSoFar)
+          )
+      )
+      )
+    )
+    (reverse (combiListIndependentOfOrder (reverse combiList)))
+    )
+  )
+;(Kombination 2 '(a b c)) ; -> '((a b) (a c) (b c))
+
+
+; ##############################################################################
+; ## Aufgabe 3 - Zusatz ########################################################
 ; ##############################################################################
