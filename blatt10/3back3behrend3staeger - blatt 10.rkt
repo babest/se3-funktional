@@ -330,3 +330,47 @@
 ; ## Aufgabe 3.2 - Zusatz ######################################################
 ; ##############################################################################
 
+
+(define *a* 10)
+(define *b* '*a* )
+(define (merke x) (lambda () x))
+(define (test x)
+  ;(let (( x (+ x *a* ))))
+  (+ x 2 ))
+
+; *a*
+; -> 10
+
+; (+ *a* *b*)
+; -> Error, eine Zahl und ein Symbol können nicht addiert werden
+
+; (+ (eval *a*) (eval *b*))
+; -> 20
+
+; (and (> *a* 10) (> *b* 3))
+; -> #f (der Vergleich *b* > 3 ist zwar nicht zulässig, wird aber nicht aufgerufen da *a* > 10 schon falsch ist
+
+; (or (> *a* 10) (/ *a* 0))
+; -> (/ *a* 0) teilen durch null ist nicht erlaubt
+
+; (+ 2 (merke 3))
+; -> merke gibt eine Funktion zurück, und Funktionen kann man nicht addieren.
+
+; (+ 2 ((merke 3)))
+; -> 5 (die Funktion, die merke zurück gibt, wird durch die doppelte Klammerung aufgerufen)
+
+; (test 4)
+; -> das let von test ist unzulässig, da es keinen body hat. Wäre es zulässig hätte aber das let keinen Einfluss
+;    auf den Rückgabewert. Es würde einfach nur (+ 4 2) zurückgegeben werden.
+
+
+
+; ##############################################################################
+; ## Aufgabe 3.3 - Zusatz ######################################################
+; ##############################################################################
+
+; 3 * 4 + 5 * 6
+; (+ (* 3 4) (* 5 6))
+
+;( define (f x) (sqrt (- 1 (expt (sin x) 2))))
+
