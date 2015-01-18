@@ -148,7 +148,7 @@
      ; Überprüpft die Transitivität für jeden Knoten
      (every edgeTester rNoReflexiv)
      )
-)
+   )
 
 ; Überprüpft ob eine Relation eine Äquivalenzrelation ist
 ; Eine Äquivalenzrelation hat folgende Eigenschaften: reflexiv, symmetrisch und transitiv
@@ -214,7 +214,7 @@
    (car m)
    (Kreuzprodukt (car m) (Produkt (cdr m)))
    )
-)
+  )
 ;( Produkt '( (1 2) (a b) (X) )) ; -> '((1 (a X)) (1 (b X)) (2 (a X)) (2 (b X)))
 ; ####################### TODO ##############
 ; -> flatten the result.
@@ -228,9 +228,9 @@
 ; Überprüft ob eine Liste nur die gleichen (equal?) Elemente beinhaltet
 ( define (all-the-same? list)
    ; Sind genug Daten (Paare) vorhanden, um vergleichen zu können?
-  (if
-   (and (pair? list) (pair? (cdr list)))
-   ; Ist das vordereste und das nächste Element identisch?
+   (if
+    (and (pair? list) (pair? (cdr list)))
+    ; Ist das vordereste und das nächste Element identisch?
     (if
      (equal? (car list) (cadr list))
      (all-the-same? (cdr list)) ; Rekursiv durch die Liste arbeiten
@@ -238,8 +238,8 @@
      )
     
     #t
+    )
    )
-)
 
 ; Gibt die Liste aller Kombinationen (Auswahl von cardinality verschiedenen Elementen aus einer Menge M) zurück
 ; Die Reihenfolge bleibt unbeachtet
@@ -252,28 +252,81 @@
       (if
        (empty? filterThisList)
        '()
-      (let
-          ; Speichert rekursiv die Liste, die mit dem Listenrest schon reihenfolge unabhängig aufgebaut wurde.
-          ([listSoFar (combiListIndependentOfOrder (cdr filterThisList))])
-          (if
-           ; Überprüpft, ob das aktuelle (car filterThisList) Element schon in der combiListe vorhanden ist
-            (or 
-             (member (car filterThisList) listSoFar) ; direktes Duplikat
-             (member (reverse (car filterThisList)) listSoFar) ; Duplikat mit anderer Reihenfolge
-             (all-the-same? (car filterThisList)) ; Reflexives Element
-             )
-            listSoFar
-            (cons (car filterThisList) listSoFar) ; Falls nicht, dann aktuelles Element hinzufügen.
+       (let
+           ; Speichert rekursiv die Liste, die mit dem Listenrest schon reihenfolge unabhängig aufgebaut wurde.
+           ([listSoFar (combiListIndependentOfOrder (cdr filterThisList))])
+         (if
+          ; Überprüpft, ob das aktuelle (car filterThisList) Element schon in der combiListe vorhanden ist
+          (or 
+           (member (car filterThisList) listSoFar) ; direktes Duplikat
+           (member (reverse (car filterThisList)) listSoFar) ; Duplikat mit anderer Reihenfolge
+           (all-the-same? (car filterThisList)) ; Reflexives Element
+           )
+          listSoFar
+          (cons (car filterThisList) listSoFar) ; Falls nicht, dann aktuelles Element hinzufügen.
           )
+         )
+       )
       )
-      )
-    )
     (reverse (combiListIndependentOfOrder (reverse combiList)))
     )
   )
 ;(Kombination 2 '(a b c)) ; -> '((a b) (a c) (b c))
 
 
+
 ; ##############################################################################
-; ## Aufgabe 3 - Zusatz ########################################################
+; ## Aufgabe 3.1 - Zusatz ######################################################
 ; ##############################################################################
+
+; (max (min 2 (- 2 3)))
+; -> -1
+
+; '(+ ,(- 2 4) 2)
+; -> '(+ ,(- 2 4) 2)
+
+; (car '(Alle meine Entchen))
+; -> 'Alle
+
+;(cdr '(schwimmen auf (dem See)))
+; -> '(auf (dem See))
+
+; (cons 'Listen '(sind einfach))
+; -> '(Listen sind einfach)
+
+; (cons 'Paare 'auch)
+; -> '(Paare . auch)
+
+#|( equal?
+  (list 'Racket 'Prolog 'Java)
+  '(Racket Prolog Java)
+  )|#
+; -> #t
+
+#|( eq?
+  (list 'Racket 'Prolog 'Java)
+  (cons 'Racket '(Prolog Java))
+  )|#
+; -> #f
+
+#|(map
+ (lambda (x) (* x x x))
+ '( 1 2 3 )
+ )|#
+; -> '(1 8 27)
+
+; (filter odd? '(1 2 3 4 5))
+; -> '(1 3 5)
+
+; ((curry min 6) 2)
+; -> 2
+
+; ((curry = 2) 2)
+; -> #t
+
+
+
+; ##############################################################################
+; ## Aufgabe 3.2 - Zusatz ######################################################
+; ##############################################################################
+
