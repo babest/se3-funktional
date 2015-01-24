@@ -1,4 +1,4 @@
-#lang racket
+#lang lazy
 
 #|
   SE3 Funktionale Programmierung
@@ -104,3 +104,97 @@
 ;     (ausleihe ?buch2 ?lesernummer)
 ;     (!= ?buch1 ?buch2)
 ;     (test (string<? ?buch1 buch2)))
+
+
+; ##############################################################################
+; ## Aufgabe 2 #################################################################
+; ##############################################################################
+
+; Stream der natürlichen Zahlen (wichtig: Lazy Racket benutzen, sonst entsteht hier
+; endlos Schleife (Rekursive Listendefinition)
+(define (natsAbN n)
+  (cons n (natsAbN (+ 1 n)))
+  )
+
+; Stream, der alle Siebenen und durch sieben teilbare Zahlen durch 'sum' ersetzt
+(define (siebenStream stream)
+  (let
+      (
+       ; Das aktuelle Element überprüpfen
+       [currentElement 
+        (cond
+          ; Ist es durch Sieben teilbar, dann 'sum'
+          [(= (remainder (car stream) 7) 0) "sum"]
+          ; Enthält es eine Sieben, dann 'sum'
+          [(regexp-match? #rx"7" (number->string (car stream)) ) "sum"]
+          ; Sonst, das ganz normale aktuelle Element
+          [else (car stream)]
+          )
+        ]
+       )
+    ; Stream rekursiv für alle folgenden Elemente definieren
+    (cons currentElement (siebenStream (cdr stream)))
+    )
+  )
+; Den Stream definieren
+(define dieBoesenSieben (siebenStream (natsAbN 1)))
+; (!! (take 40 dieBoesenSieben))
+
+
+; ##############################################################################
+; ## Aufgabe 3 #################################################################
+; ##############################################################################
+
+; Implementation taken from the slides
+(define (fibu n)
+  (cond 
+    [(= n 0) 0]
+    [(= n 1) 1]
+    [else
+     (+
+      (fibu (- n 1))
+      (fibu (- n 2))
+      )]
+    )
+  )
+
+; Implementation taken from the slides
+(define (memori fn)
+  (letrec
+      ([table '()]
+       [store (lambda (arg val)
+                (set! table 
+                      (cons (cons arg val) table)
+                      ) val)]
+       [retrieve
+        (lambda (arg)
+          (let ((val-pair (assoc arg table)))
+            (if 
+             val-pair 
+             (cdr val-pair)
+             #f
+             )
+            )
+          )
+        ]
+       [ensure-val
+        (lambda (x)
+          (let ([stored-val (retrieve x)])
+            (if
+             stored-val
+             stored-val
+             (store x (fn x))
+             )
+            )
+          )]
+       )
+    ensure-val
+    )
+  )
+
+; Taken from the slides
+(define memo-fib (memori fibu))
+(set! fibu (memori fibu))
+
+; Is working, but not very performant
+(memo-fib 30)
