@@ -203,6 +203,26 @@
 ;(Kreuzprodukt '(1 2 3) '(a b c)) ; -> '((1 a) (1 b) (1 c) (2 a) (2 b) (2 c) (3 a) (3 b) (3 c))
 
 
+; --- ADDED LATER [BEGIN]
+(define (cartesian-product* next-list so-far)
+  (foldl append '()
+         (map (λ (elt)
+                (map 
+                 (λ (x) (cons elt x))
+                 so-far)
+                )
+              next-list)
+         )
+  )
+
+(define (cartesian-products lists)
+  (foldl cartesian-product* '(()) lists))
+
+;(cartesian-products '())
+;(cartesian-products '((a) (b)))
+;(cartesian-products '((1 2 3)))
+; --- ADDED LATER [END]
+
 ; ##############################################################################
 ; ## Aufgabe 2.2 ###############################################################
 ; ##############################################################################
@@ -372,3 +392,140 @@
 
 ;( define (f x) (sqrt (- 1 (expt (sin x) 2))))
 
+
+; ##############################################################################
+; ## Aufgabe 3.7 ###############################################################
+; ##############################################################################
+
+(define (laengen xss)
+  (define (laenge-linear xs)
+    (cond
+     [(pair? xs)
+      (add1 (laenge-linear (cdr xs)))]
+     [else 0]
+     ) 
+    )
+  (define (laenge-endrekursiv-accu xs accu)
+    (cond
+     [(pair? xs)
+      (laenge-endrekursiv-accu (cdr xs) (add1 accu))]
+     [else accu]
+     ) 
+    )
+  (define (laenge-endrekursiv xs)
+    (laenge-endrekursiv-accu xs 0)
+    )
+    
+  ;(map laenge-linear xss)
+  (map laenge-endrekursiv xss)
+  )
+
+;(laengen '( (1 3 4) ( Auto Bus) () (3 4 5 6))) ;  -> (3 2 0 4)
+
+
+; ##############################################################################
+; ## Aufgabe 3.8 ###############################################################
+; ##############################################################################
+
+(define (make-length value unit)
+  (cons value unit)
+  )
+
+(define (value-of-length len)
+  (car len)
+  )
+(define (unit-of-length len)
+  (cdr len)
+  )
+
+;(value-of-length (make-length 3 'cm)) ; -> 3
+;(unit-of-length (make-length 3 'cm)) ; -> cm
+
+
+(define (scale-length len fac)
+  (make-length (* (value-of-length len) fac) (unit-of-length len))
+  )
+
+;(value-of-length (scale-length (make-length 3 'cm) 2)) ; -> 6
+
+
+(define *conversiontable* ;
+  '( ; (unit . factor)
+    (m . 1.0)
+    (cm . 0.01)
+    (mm . 0.001)
+    (km . 1000)
+    (inch . 0.0254)
+    (feet . 0.3048)
+    (yard . 0.9144)
+    )
+  )
+
+(define (factor unit)
+  (cdr (assoc unit *conversiontable*))
+  )
+;(factor 'mm) -> 0.001
+
+
+(define (length->meter len)
+  (make-length 
+   (value-of-length 
+    (scale-length len (factor (unit-of-length len)))
+    )
+  'm
+  )
+  )
+;(length->meter (make-length 3 'cm)) ; -> (0.03 m)
+
+
+(define (length= len1 len2)
+  (equal? (length->meter len1) (length->meter len2))
+  )
+(define (length< len1 len2)
+  (< 
+   (value-of-length (length->meter len1)) 
+   (value-of-length (length->meter len2))
+   )
+  )
+;(length< (make-length 3 'cm) (make-length 6 'km)) ; -> #t
+;(length= (make-length 300 'cm) (make-length 3 'm)) ; -> #t
+
+(define (length+ len1 len2)
+  (make-length
+   (+
+    (value-of-length (length->meter len1)) 
+    (value-of-length (length->meter len2))
+    )
+   'm
+   )
+  )
+(define (length- len1 len2)
+  (make-length
+   (-
+    (value-of-length (length->meter len1)) 
+    (value-of-length (length->meter len2))
+    )
+   'm
+   )
+  )
+;(length+ (make-length 3 'cm) (make-length 1 'km)) ; -> (1000.03 m)
+;(length- (make-length 1.001 'km) (make-length 1 'm)) ; -> ~ (1000.0 m)
+
+
+(define lengthList (list (make-length 6 'km) (make-length 2 'feet) (make-length 1 'cm) (make-length 3 'inch)))
+(define (lengths->meter xs)
+  (map length->meter xs)
+  )
+(define (lengthsShorterThanOneMeter xs)
+  (filter (curryr length< (make-length 1 'm)) xs)
+  )
+(define (sumOfLengths xs)
+  (foldl + 0 (map value-of-length (lengths->meter xs)))
+  )
+(define (minLengthOfLengths xs)
+  (car (sort xs length<))
+  )
+;(lengths->meter lengthList) ; -> '((6000 . m) (0.6096 . m) (0.01 . m) (0.07619999999999999 . m))
+;(lengthsShorterThanOneMeter lengthList) ; -> '((2 . feet) (1 . cm) (3 . inch))
+;(sumOfLengths lengthList) ; -> 6000.6958
+;(minLengthOfLengths lengthList) ; -> '(1 . cm)
