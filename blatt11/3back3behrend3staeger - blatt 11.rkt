@@ -16,10 +16,6 @@
   und können einfach auskommentiert werden.
 |#
 
-; TODO
-; - Stimmt 1.1.2 ?
-; - Ich verstehe leider nicht, warum 1.2.4 und 1.2.5 nicht funktionieren...
-
 
 
 ; ##############################################################################
@@ -34,7 +30,7 @@
 
 (Karten ((k Pik As) (k Herz Dame)))
 (Karten ((k Pik As) (k Herz Koenig)))
--> Keine Unifikation, da keine Variablen ?
+-> Keine Unifikation, da keine Variablen
 
 (Karten ((k Pik As) (k Herz Dame)))
 (Karten ((k Pik As) (k Herz ?Farbe)))
@@ -141,11 +137,12 @@
 ; (!! (take 40 dieBoesenSieben))
 
 
+
 ; ##############################################################################
 ; ## Aufgabe 3 #################################################################
 ; ##############################################################################
 
-; Implementation taken from the slides
+; Implementation
 (define (fibu n)
   (cond 
     [(= n 0) 0]
@@ -158,7 +155,7 @@
     )
   )
 
-; Implementation taken from the slides
+; Implementation
 (define (memori fn)
   (letrec
       ([table '()]
