@@ -400,22 +400,22 @@
 (define (laengen xss)
   (define (laenge-linear xs)
     (cond
-     [(pair? xs)
-      (add1 (laenge-linear (cdr xs)))]
-     [else 0]
-     ) 
+      [(pair? xs)
+       (add1 (laenge-linear (cdr xs)))]
+      [else 0]
+      ) 
     )
   (define (laenge-endrekursiv-accu xs accu)
     (cond
-     [(pair? xs)
-      (laenge-endrekursiv-accu (cdr xs) (add1 accu))]
-     [else accu]
-     ) 
+      [(pair? xs)
+       (laenge-endrekursiv-accu (cdr xs) (add1 accu))]
+      [else accu]
+      ) 
     )
   (define (laenge-endrekursiv xs)
     (laenge-endrekursiv-accu xs 0)
     )
-    
+  
   ;(map laenge-linear xss)
   (map laenge-endrekursiv xss)
   )
@@ -428,14 +428,14 @@
 ; ##############################################################################
 
 (define (make-length value unit)
-  (cons value unit)
+  (list value unit)
   )
 
 (define (value-of-length len)
   (car len)
   )
 (define (unit-of-length len)
-  (cdr len)
+  (cadr len)
   )
 
 ;(value-of-length (make-length 3 'cm)) ; -> 3
@@ -472,10 +472,10 @@
    (value-of-length 
     (scale-length len (factor (unit-of-length len)))
     )
-  'm
+   'm
+   )
   )
-  )
-;(length->meter (make-length 3 'cm)) ; -> (0.03 m)
+(length->meter '(3 cm)) ; -> (0.03 m)
 
 
 (define (length= len1 len2)
